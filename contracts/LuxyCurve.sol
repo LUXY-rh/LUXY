@@ -62,9 +62,8 @@ contract LuxyCurve {
 
     /// @notice Returns the ETH quote for a buy or sell
     /// @param amount Token amount
-    /// @param isBuy true = how much ETH to buy `amount` tokens
     /// @return quote The ETH value of the trade (before fees)
-    function getQuote(uint256 amount, bool isBuy) public view returns (uint256 quote) {
+    function getQuote(uint256 amount, bool /* isBuy */) public view returns (uint256 quote) {
         // price(s) = P0 + deltaP * s² / PRECISION
         uint256 s = totalSold;
         uint256 price = P0 + (deltaP * s * s) / PRECISION;

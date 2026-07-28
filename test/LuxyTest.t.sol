@@ -104,4 +104,29 @@ contract LuxyTest is Test {
         vm.prank(buyer);
         curve.buy{value: 0.1 ether}();
     }
+
+    function testRevertZeroBuy() public {
+        vm.expectRevert("LuxyCurve: zero ETH");
+        vm.prank(buyer);
+        curve.buy{value: 0}();
+    }
+
+    function testRevertZeroSell() public {
+        vm.expectRevert("LuxyCurve: zero tokens");
+        vm.prank(buyer);
+        curve.sell(0);
+    }
+
+    function testGovernanceOnly() public {
+        vm.expectRevert("LuxyCurve: only factory");
+        vm.prank(buyer);
+        curve.setBuyFee(50);
+    }
+
+    function testCannotSetCurveTwice() public {
+        // Curve already set by factory — non-factory can't call
+        vm.expectRevert("LuxyToken: curve already set");
+        vm.prank(address(factory));
+        token.setCurve(address(0x1));
+    }
 }
