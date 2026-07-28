@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity ^0.8.24;
 
 import "forge-std/Script.sol";
 import "../contracts/LuxyFactory.sol";
@@ -16,7 +16,7 @@ contract DeployLuxy is Script {
 
         console.log("LuxyFactory deployed at:", address(factory));
         console.log("Fee recipient:", feeRecipient);
-        console.log("Governance:", factory.governance());
+        console.log("Governance:", factory.owner());
 
         vm.stopBroadcast();
     }

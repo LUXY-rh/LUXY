@@ -1,122 +1,147 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity 0.8.24;
 
+import {Ownable} from "@openzeppelin/contracts/access/Ownable.sol";
 import {LuxyToken} from "./LuxyToken.sol";
 import {LuxyCurve} from "./LuxyCurve.sol";
 
-/// @title LuxyFactory — Deploys token + curve in one transaction
-/// @notice Governance sets fee recipient and default curve params.
-///         Anyone can deploy, one signature only.
-contract LuxyFactory {
-    // Default curve parameters
-    uint256 public defaultP0 = 1e12;          // 0.000001 ETH per token
-    uint256 public defaultDeltaP = 1e8;       // steepness
-    uint256 public defaultTargetETH = 3.96 ether;
+/// @title LuxyFactory
+/// @notice Deploys a LuxyToken + LuxyCurve pair atomically in one signature,
+///         maintains the on-chain deployment registry (for the indexer to
+///         read), and holds the governance knobs described in the docs:
+///         launch pausing, gated-mode allowlist, and per-launch fee ceiling.
+contract LuxyFactory is Ownable {
+    uint256 public constant DEFAULT_TOTAL_SUPPLY = 1_000_000_000 ether; // 1e9 tokens, 18 decimals
+    uint256 public constant DEFAULT_TARGET = 3.96 ether;
+    uint256 public constant DEFAULT_FEE_BPS = 100; // 1%
+    uint256 public constant MAX_FEE_BPS_LOCAL = 500; // 5% hard ceiling
 
-    address public feeRecipient;
-    address public governance;
+    address public graduationRouter;
+    bool public launchesPaused;
+    bool public gatedMode;
+    mapping(address => bool) public allowedDeployers;
+    mapping(address => bool) public blocked; // access-control layer: wallets blocked from trading
 
-    // Track all deployed tokens
-    LuxyToken[] public tokens;
-    mapping(address => bool) public isLuxyToken;
+    struct Deployment {
+        address token;
+        address curve;
+        address creator;
+        uint256 deployedAt;
+    }
 
-    event TokenDeployed(
-        address indexed token,
-        address indexed curve,
-        address indexed creator,
-        string name,
-        string symbol
-    );
+    Deployment[] public deployments;
+    mapping(address => uint256) public curveIndexByToken; // token => index+1 in deployments (0 = none)
 
-    modifier onlyGovernance() {
-        require(msg.sender == governance, "LuxyFactory: only governance");
+    event LaunchDeployed(address indexed token, address indexed curve, address indexed creator, string name, string symbol);
+    event LaunchesPausedSet(bool paused);
+    event GatedModeSet(bool gated);
+    event DeployerAllowed(address indexed who, bool allowed);
+    event WalletBlocked(address indexed who, bool blocked_);
+
+    error Paused();
+    error NotAllowed();
+    error FeeTooHigh();
+
+    constructor(address graduationRouter_) Ownable(msg.sender) {
+        graduationRouter = graduationRouter_;
+    }
+
+    modifier canDeploy() {
+        if (launchesPaused) revert Paused();
+        if (gatedMode && !allowedDeployers[msg.sender]) revert NotAllowed();
         _;
     }
 
-    constructor(address _feeRecipient) {
-        governance = msg.sender;
-        feeRecipient = _feeRecipient;
-    }
-
-    /// @notice Deploy a new token + bonding curve in one transaction
-    /// @param name Token name
-    /// @param symbol Token ticker
-    /// @return tokenAddr Address of the deployed token
-    /// @return curveAddr Address of the deployed curve
+    /// @notice One-signature deploy: creates the token (minted fully to the curve)
+    ///         and its bonding curve contract in a single call.
     function deploy(
-        string memory name,
-        string memory symbol
-    ) external returns (address tokenAddr, address curveAddr) {
-        return _deploy(name, symbol, defaultP0, defaultDeltaP, defaultTargetETH);
-    }
+        string calldata name_,
+        string calldata symbol_,
+        uint256 feeBps_
+    ) external canDeploy returns (address tokenAddr, address curveAddr) {
+        if (feeBps_ > MAX_FEE_BPS_LOCAL) revert FeeTooHigh();
 
-    /// @notice Deploy with custom curve parameters
-    function deployCustom(
-        string memory name,
-        string memory symbol,
-        uint256 _P0,
-        uint256 _deltaP,
-        uint256 _targetETH
-    ) external returns (address tokenAddr, address curveAddr) {
-        return _deploy(name, symbol, _P0, _deltaP, _targetETH);
-    }
-
-    function _deploy(
-        string memory name,
-        string memory symbol,
-        uint256 _P0,
-        uint256 _deltaP,
-        uint256 _targetETH
-    ) internal returns (address tokenAddr, address curveAddr) {
-        // Deploy token with no curve set yet
-        LuxyToken token = new LuxyToken(
-            name,
-            symbol,
-            address(0),
-            address(this)
+        // Precompute curve address via CREATE would need CREATE2; for simplicity
+        // deploy curve first with a placeholder, then token, then wire back.
+        // Two-step deploy kept atomic within a single external call.
+        LuxyCurveDeployer helper = new LuxyCurveDeployer();
+        (tokenAddr, curveAddr) = helper.deployPair(
+            name_,
+            symbol_,
+            DEFAULT_TOTAL_SUPPLY,
+            _curveP0(),
+            _curveDeltaP(),
+            DEFAULT_TARGET,
+            feeBps_,
+            graduationRouter
         );
 
-        LuxyCurve curve = new LuxyCurve(
-            address(token),
-            _P0,
-            _deltaP,
-            _targetETH,
-            address(this),
-            feeRecipient
-        );
+        uint256 idx = deployments.length;
+        deployments.push(Deployment(tokenAddr, curveAddr, msg.sender, block.timestamp));
+        curveIndexByToken[tokenAddr] = idx + 1;
 
-        // Set the real curve address on the token
-        token.setCurve(address(curve));
-
-        tokens.push(token);
-        isLuxyToken[address(token)] = true;
-
-        emit TokenDeployed(address(token), address(curve), msg.sender, name, symbol);
-
-        return (address(token), address(curve));
+        emit LaunchDeployed(tokenAddr, curveAddr, msg.sender, name_, symbol_);
     }
 
-    // ── Governance ──
-
-    function setGovernance(address _gov) external onlyGovernance {
-        governance = _gov;
+    function deploymentsCount() external view returns (uint256) {
+        return deployments.length;
     }
 
-    function setFeeRecipient(address _recipient) external onlyGovernance {
-        feeRecipient = _recipient;
+    function _curveP0() internal pure returns (uint256) {
+        return 1e12; // starting price in wei per token, WAD-scaled; tune before deploy
     }
 
-    function setDefaultParams(
-        uint256 _P0,
-        uint256 _deltaP,
-        uint256 _targetETH
-    ) external onlyGovernance {
-        defaultP0 = _P0;
-        defaultDeltaP = _deltaP;
-        defaultTargetETH = _targetETH;
+    function _curveDeltaP() internal pure returns (uint256) {
+        return 1e3; // curve steepness; tune so target reserve is hit near expected supply
     }
 
-    function tokenCount() external view returns (uint256) {
-        return tokens.length;
+    // --- Governance (docs: "Governance" administrative scope) ---
+
+    function setLaunchesPaused(bool paused) external onlyOwner {
+        launchesPaused = paused;
+        emit LaunchesPausedSet(paused);
+    }
+
+    function setGatedMode(bool gated) external onlyOwner {
+        gatedMode = gated;
+        emit GatedModeSet(gated);
+    }
+
+    function setAllowedDeployer(address who, bool allowed) external onlyOwner {
+        allowedDeployers[who] = allowed;
+        emit DeployerAllowed(who, allowed);
+    }
+
+    function setBlocked(address who, bool blocked_) external onlyOwner {
+        blocked[who] = blocked_;
+        emit WalletBlocked(who, blocked_);
+    }
+
+    function setGraduationRouter(address router) external onlyOwner {
+        graduationRouter = router;
+    }
+}
+
+/// @dev Tiny one-shot helper that deploys the curve, then the token (minted
+///      to itself), then wires them together — all inside a single external
+///      call, so LuxyFactory.deploy() is genuinely one signature end to end.
+contract LuxyCurveDeployer {
+    function deployPair(
+        string calldata name_,
+        string calldata symbol_,
+        uint256 totalSupply_,
+        uint256 p0_,
+        uint256 dP_,
+        uint256 target_,
+        uint256 feeBps_,
+        address graduationRouter_
+    ) external returns (address tokenAddr, address curveAddr) {
+        LuxyCurve curve = new LuxyCurve(p0_, dP_, target_, feeBps_, graduationRouter_);
+        LuxyToken tok = new LuxyToken(name_, symbol_, totalSupply_, address(this));
+
+        tok.initCurve(address(curve));   // forwards full supply to the curve
+        curve.setToken(address(tok));    // wires the curve's token reference
+
+        return (address(tok), address(curve));
     }
 }

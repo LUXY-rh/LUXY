@@ -1,171 +1,164 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.26;
+pragma solidity 0.8.24;
 
 import {LuxyToken} from "./LuxyToken.sol";
+import {IGraduationRouter} from "./interfaces/IGraduationRouter.sol";
 
-/// @title LuxyCurve — Bonding curve: P(s) = P₀ + ΔP · s²
-/// @notice Prices every buy/sell from on-chain reserves. Graduates at target.
+/// @title LuxyCurve
+/// @notice Deterministic bonding curve for a single LuxyToken.
+///         Price function: P(s) = P0 + dP * s^2  (s = tokens sold so far)
+///         Cost to buy `amount` tokens starting at supply `s0`:
+///           cost = P0*amount + dP * ((s0+amount)^3 - s0^3) / 3
+///         NOTE: this uses plain uint256 fixed-point (1e18) math for clarity.
+///         Before mainnet deploy, harden precision with a battle-tested
+///         fixed-point lib (e.g. PRBMath) and add fuzz/invariant tests around
+///         the cubic term for large supplies.
 contract LuxyCurve {
-    LuxyToken public immutable token;
+    uint256 public constant WAD = 1e18;
 
-    // Curve parameters (fixed at deploy, immutable)
-    uint256 public immutable P0;        // Starting price per token (in wei)
-    uint256 public immutable deltaP;    // Steepness coefficient
-    uint256 public immutable targetETH; // Reserve target for graduation (~3.96 ETH)
-    uint256 public constant PRECISION = 1e18;
+    uint256 public constant MAX_BUY_BPS = 500;   // 5% of curve target, per tx
+    uint256 public constant MAX_FEE_BPS = 500;   // 5% fee ceiling
+    uint256 public constant BPS_DENOM = 10_000;
 
-    // State
-    uint256 public totalSold;       // Total tokens sold (cumulative supply of the curve)
-    uint256 public reserveETH;      // Total ETH in the curve
+    LuxyToken public token;
+    address public immutable factory;
+    address public immutable graduationRouter;
+
+    uint256 public immutable p0;      // starting price, WAD
+    uint256 public immutable dP;      // curve steepness, WAD
+    uint256 public immutable target;  // graduation reserve target, in wei (~3.96 ETH)
+    uint256 public immutable feeBps;  // buy/sell fee, set by governance at deploy, <= MAX_FEE_BPS
+
+    uint256 public supplySold;   // s: tokens released from the curve so far
+    uint256 public reserve;      // ETH held by the curve
     bool public graduated;
 
-    // Fee (basis points, max 500 = 5%)
-    uint256 public buyFeeBps = 100;  // 1%
-    uint256 public sellFeeBps = 100; // 1%
-    uint256 public constant MAX_FEE_BPS = 500;
-    uint256 public constant BPS_DENOMINATOR = 10000;
+    address public referrer; // optional, set on first buy per trader via referral code resolution off-chain -> passed in
 
-    address public immutable factory;
-    address public immutable feeRecipient;
+    event Deployed(address indexed token, address indexed creator, uint256 p0, uint256 dP, uint256 target);
+    event Buy(address indexed buyer, uint256 tokenAmount, uint256 ethIn, uint256 fee, address referrer, uint256 newSupply);
+    event Sell(address indexed seller, uint256 tokenAmount, uint256 ethOut, uint256 fee, uint256 newSupply);
+    event Graduated(address indexed pool, uint256 tokenAmount, uint256 ethAmount);
 
-    event Bought(address indexed buyer, uint256 ethIn, uint256 tokensOut);
-    event Sold(address indexed seller, uint256 tokensIn, uint256 ethOut);
-    event Graduated(address indexed pool, uint256 eth, uint256 tokens);
-
-    modifier onlyFactory() {
-        require(msg.sender == factory, "LuxyCurve: only factory");
-        _;
-    }
-
-    modifier tradingLive() {
-        require(!graduated, "LuxyCurve: graduated");
-        _;
-    }
+    error AlreadyGraduated();
+    error BelowMinBuy();
+    error ExceedsMaxBuyPerTx();
+    error SlippageExceeded();
+    error InsufficientReserve();
+    error FeeTooHigh();
 
     constructor(
-        address _token,
-        uint256 _P0,
-        uint256 _deltaP,
-        uint256 _targetETH,
-        address _factory,
-        address _feeRecipient
+        uint256 p0_,
+        uint256 dP_,
+        uint256 target_,
+        uint256 feeBps_,
+        address graduationRouter_
     ) {
-        token = LuxyToken(_token);
-        P0 = _P0;
-        deltaP = _deltaP;
-        targetETH = _targetETH;
-        factory = _factory;
-        feeRecipient = _feeRecipient;
+        if (feeBps_ > MAX_FEE_BPS) revert FeeTooHigh();
+        factory = msg.sender;
+        p0 = p0_;
+        dP = dP_;
+        target = target_;
+        feeBps = feeBps_;
+        graduationRouter = graduationRouter_;
     }
 
-    // ── Quote ──
-
-    /// @notice Returns the ETH quote for a buy or sell
-    /// @param amount Token amount
-    /// @return quote The ETH value of the trade (before fees)
-    function getQuote(uint256 amount, bool /* isBuy */) public view returns (uint256 quote) {
-        // price(s) = P0 + deltaP * s² / PRECISION
-        uint256 s = totalSold;
-        uint256 price = P0 + (deltaP * s * s) / PRECISION;
-        quote = (amount * price) / PRECISION;
+    /// @notice Wired once by the deployer helper right after both the curve
+    ///         and the token exist (token.initCurve() forwards the full
+    ///         supply here in the same deploy transaction).
+    function setToken(address token_) external {
+        require(msg.sender == factory, "only factory");
+        require(address(token) == address(0), "already set");
+        token = LuxyToken(token_);
     }
 
-    /// @notice Returns quotes WITH fees applied
-    function getQuoteWithFee(uint256 amount, bool isBuy)
-        external
-        view
-        returns (uint256 quote, uint256 fee)
-    {
-        quote = getQuote(amount, isBuy);
-        uint256 feeBps = isBuy ? buyFeeBps : sellFeeBps;
-        fee = (quote * feeBps) / BPS_DENOMINATOR;
-        if (isBuy) quote += fee;
-        else quote -= fee;
+    /// @notice Quote the ETH cost (including fee) to buy `amount` tokens at current state.
+    function quoteBuy(uint256 amount) public view returns (uint256 cost, uint256 fee) {
+        uint256 s0 = supplySold;
+        uint256 s1 = s0 + amount;
+        uint256 base = _integral(s0, s1);
+        fee = (base * feeBps) / BPS_DENOM;
+        cost = base + fee;
     }
 
-    // ── Trade ──
+    /// @notice Quote the ETH returned (after fee) for selling `amount` tokens at current state.
+    function quoteSell(uint256 amount) public view returns (uint256 proceeds, uint256 fee) {
+        uint256 s0 = supplySold;
+        uint256 s1 = s0 - amount;
+        uint256 base = _integral(s1, s0);
+        fee = (base * feeBps) / BPS_DENOM;
+        proceeds = base - fee;
+    }
 
-    /// @notice Buy tokens with ETH — exact ETH input
-    function buy() external payable tradingLive returns (uint256 tokensOut) {
-        require(msg.value > 0, "LuxyCurve: zero ETH");
+    /// @dev cost = P0*(s1-s0) + dP*(s1^3 - s0^3)/3, all WAD-scaled.
+    function _integral(uint256 s0, uint256 s1) internal view returns (uint256) {
+        uint256 linear = (p0 * (s1 - s0)) / WAD;
+        uint256 cubic = (dP * (s1 * s1 * s1 - s0 * s0 * s0)) / (3 * WAD * WAD);
+        return linear + cubic;
+    }
 
-        uint256 fee = (msg.value * buyFeeBps) / BPS_DENOMINATOR;
-        uint256 ethForTokens = msg.value - fee;
+    function buy(uint256 minTokensOut, uint256 tokenAmount, address referrer_) external payable {
+        if (graduated) revert AlreadyGraduated();
+        if (tokenAmount < 1 ether) revert BelowMinBuy(); // min buy: 1 token
+        if (tokenAmount > (target * MAX_BUY_BPS) / BPS_DENOM) revert ExceedsMaxBuyPerTx();
+        if (tokenAmount < minTokensOut) revert SlippageExceeded();
 
-        // Calculate tokens for ETH at current price
-        uint256 price = P0 + (deltaP * totalSold * totalSold) / PRECISION;
-        tokensOut = (ethForTokens * PRECISION) / price;
-        require(tokensOut > 0, "LuxyCurve: zero tokens");
+        (uint256 cost, uint256 fee) = quoteBuy(tokenAmount);
+        require(msg.value >= cost, "insufficient ETH sent");
 
-        totalSold += tokensOut;
-        reserveETH += ethForTokens;
+        supplySold += tokenAmount;
+        reserve += (cost - fee);
 
-        // Mint tokens to buyer
-        token.mint(msg.sender, tokensOut);
+        token.transfer(msg.sender, tokenAmount);
 
-        // Send fee
-        if (fee > 0) payable(feeRecipient).transfer(fee);
+        // refund overpayment
+        if (msg.value > cost) {
+            (bool ok, ) = msg.sender.call{value: msg.value - cost}("");
+            require(ok, "refund failed");
+        }
 
-        emit Bought(msg.sender, msg.value, tokensOut);
+        emit Buy(msg.sender, tokenAmount, cost, fee, referrer_, supplySold);
 
-        // Check graduation
-        if (reserveETH >= targetETH) {
+        if (reserve >= target) {
             _graduate();
         }
     }
 
-    /// @notice Sell tokens for ETH — proportional to reserve
-    function sell(uint256 tokensIn) external tradingLive returns (uint256 ethOut) {
-        require(tokensIn > 0, "LuxyCurve: zero tokens");
-        require(token.balanceOf(msg.sender) >= tokensIn, "LuxyCurve: insufficient balance");
-        require(tokensIn <= totalSold, "LuxyCurve: exceeds supply");
+    function sell(uint256 tokenAmount, uint256 minEthOut) external {
+        if (graduated) revert AlreadyGraduated();
 
-        // Proportional: ethOut = tokensIn * reserveETH / totalSold
-        uint256 grossETH = (tokensIn * reserveETH) / totalSold;
-        uint256 fee = (grossETH * sellFeeBps) / BPS_DENOMINATOR;
-        ethOut = grossETH - fee;
+        (uint256 proceeds, uint256 fee) = quoteSell(tokenAmount);
+        if (proceeds < minEthOut) revert SlippageExceeded();
+        if (proceeds > reserve) revert InsufficientReserve();
 
-        require(ethOut > 0, "LuxyCurve: zero ETH out");
-        require(reserveETH >= grossETH, "LuxyCurve: insufficient reserves");
+        token.transferFrom(msg.sender, address(this), tokenAmount);
+        supplySold -= tokenAmount;
+        reserve -= proceeds;
 
-        totalSold -= tokensIn;
-        reserveETH -= grossETH;
+        (bool ok, ) = msg.sender.call{value: proceeds}("");
+        require(ok, "payout failed");
 
-        token.burn(msg.sender, tokensIn);
-        payable(msg.sender).transfer(ethOut);
-        if (fee > 0) payable(feeRecipient).transfer(fee);
-
-        emit Sold(msg.sender, tokensIn, ethOut);
-    }
-
-    // ── Admin ──
-
-    function setBuyFee(uint256 _bps) external onlyFactory {
-        require(_bps <= MAX_FEE_BPS, "LuxyCurve: fee too high");
-        buyFeeBps = _bps;
-    }
-
-    function setSellFee(uint256 _bps) external onlyFactory {
-        require(_bps <= MAX_FEE_BPS, "LuxyCurve: fee too high");
-        sellFeeBps = _bps;
-    }
-
-    // ── Graduation ──
-
-    /// @notice Force graduation (emergency / admin override)
-    function forceGraduate() external onlyFactory {
-        require(!graduated, "LuxyCurve: already graduated");
-        _graduate();
+        emit Sell(msg.sender, tokenAmount, proceeds, fee, supplySold);
     }
 
     function _graduate() internal {
         graduated = true;
-        token.graduate();
-        emit Graduated(address(0), reserveETH, token.balanceOf(address(this)));
+        uint256 remainingTokens = token.balanceOf(address(this));
+        uint256 ethAmount = reserve;
+        reserve = 0;
+
+        token.approve(graduationRouter, remainingTokens);
+        address pool = IGraduationRouter(graduationRouter).graduate{value: ethAmount}(
+            address(token),
+            remainingTokens,
+            ethAmount
+        );
+        token.setPool(pool);
+
+        emit Graduated(pool, remainingTokens, ethAmount);
     }
 
     receive() external payable {
-        // Only accept ETH via buy()
-        revert("LuxyCurve: use buy()");
+        revert("use buy()");
     }
 }
