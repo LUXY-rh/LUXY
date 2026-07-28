@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxy · Documentation</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#EDE9DC; --ink:#1B2233; --ink-soft:#3A4256; --muted:#767C8C;
+    --grid:#CFC8B2; --grid-strong:#B9B097; --cobalt:#1F4B8F; --cobalt-deep:#163564;
+    --paper-rgb:237,233,220;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    background: linear-gradient(var(--paper),var(--paper)),
+      repeating-linear-gradient(0deg,var(--grid) 0px,var(--grid) 1px,transparent 1px,transparent 32px),
+      repeating-linear-gradient(90deg,var(--grid) 0px,var(--grid) 1px,transparent 1px,transparent 32px);
+    color:var(--ink); font-family:'IBM Plex Sans',sans-serif; line-height:1.5; -webkit-font-smoothing:antialiased;
+  }
+  ::selection{background:var(--cobalt); color:var(--paper);}
+  a{color:inherit;}
+  .wrap{max-width:1040px; margin:0 auto; padding:0 32px;}
+  .mono{font-family:'IBM Plex Mono',monospace;}
+
+  /* Nav */
+  header{position:sticky; top:0; z-index:50; background:rgba(var(--paper-rgb),0.86); backdrop-filter:blur(8px); border-bottom:1px solid var(--grid-strong);}
+  nav.wrap{display:flex; align-items:center; justify-content:space-between; height:64px;}
+  .logo{display:flex; align-items:center; gap:10px; font-family:'Fraunces',serif; font-weight:700; font-size:20px; text-decoration:none;}
+  .logo .mark{width:24px; height:24px; flex-shrink:0;}
+  .logo .mark svg{width:100%; height:100%; display:block;}
+  .nav-back{font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--cobalt); text-decoration:none; display:flex; align-items:center; gap:4px;}
+
+  /* Sidebar + Content layout */
+  .docs-layout{display:grid; grid-template-columns:240px 1fr; gap:48px; padding:48px 0; align-items:start;}
+  @media(max-width:820px){.docs-layout{grid-template-columns:1fr;}}
+
+  .sidebar{position:sticky; top:96px;}
+  .sidebar h4{font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--muted); margin-bottom:14px;}
+  .sidebar a{display:block; font-size:13px; color:var(--ink-soft); text-decoration:none; padding:6px 0; border-bottom:1px solid var(--grid); transition:color .15s;}
+  .sidebar a:hover,.sidebar a.active{color:var(--cobalt); font-weight:500;}
+
+  .content h1{font-family:'Fraunces',serif; font-size:clamp(28px,3.6vw,42px); font-weight:600; margin-bottom:10px;}
+  .content .desc{font-size:15px; color:var(--ink-soft); margin-bottom:36px; max-width:560px;}
+  .content section{margin-bottom:52px; padding-top:24px; border-top:1px solid var(--grid-strong);}
+  .content section:first-of-type{border-top:none; padding-top:0;}
+  .content section h2{font-family:'Fraunces',serif; font-size:24px; margin-bottom:12px;}
+  .content section h3{font-size:16px; font-weight:600; margin:22px 0 8px; color:var(--ink);}
+  .content section p{font-size:14.5px; color:var(--ink-soft); margin-bottom:12px; line-height:1.7;}
+  .content section ul{list-style:none; margin-bottom:14px;}
+  .content section ul li{font-size:14px; color:var(--ink-soft); padding:5px 0 5px 16px; position:relative;}
+  .content section ul li::before{content:'—'; position:absolute; left:0; color:var(--grid-strong);}
+  .content section code{
+    font-family:'IBM Plex Mono',monospace; font-size:13px;
+    background:rgba(31,75,143,0.06); color:var(--cobalt-deep);
+    padding:2px 6px; border-radius:2px;
+  }
+  .formula-box{
+    background:rgba(31,75,143,0.04); border:1px solid var(--grid-strong); border-radius:4px;
+    padding:24px; margin:18px 0;
+  }
+  .formula-box .big{font-family:'Fraunces',serif; font-size:28px; font-style:italic; color:var(--cobalt-deep); margin-bottom:8px;}
+  .formula-box .vars{font-family:'IBM Plex Mono',monospace; font-size:12.5px; color:var(--muted); line-height:1.9;}
+
+  .param-table{width:100%; border-collapse:collapse; margin:14px 0; border:1px solid var(--grid-strong); border-radius:3px; overflow:hidden;}
+  .param-table th,.param-table td{padding:12px 14px; text-align:left; font-size:13px; border-bottom:1px solid var(--grid);}
+  .param-table th{font-family:'IBM Plex Mono',monospace; font-size:11px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); background:rgba(255,255,255,0.4);}
+  .param-table td{color:var(--ink-soft);}
+  .param-table td.mono{color:var(--ink); font-weight:500;}
+
+  footer{border-top:1px solid var(--grid-strong); padding:40px 0 32px; margin-top:48px;}
+  .footer-row{display:flex; justify-content:space-between; align-items:center; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted);}
+
+  :focus-visible{outline:2px solid var(--cobalt); outline-offset:2px;}
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <a class="logo" href="index.html">
+      <span class="mark">
+        <svg viewBox="0 0 24 24" fill="none"><rect x="0.5" y="0.5" width="23" height="23" rx="3" stroke="#1B2233" stroke-width="1"/><path d="M4 17.5 C 8 17.5, 8 6.5, 12 6.5 C 16 6.5, 16 17.5, 20 17.5" stroke="#1F4B8F" stroke-width="1.8" fill="none" stroke-linecap="round"/></svg>
+      </span>
+      Luxy Docs
+    </a>
+    <a class="nav-back" href="index.html">← Back to app</a>
+  </nav>
+</header>
+
+<div class="wrap">
+  <div class="docs-layout">
+    <aside class="sidebar">
+      <h4>Documentation · 9 guides</h4>
+      <a href="#intro">Intro</a>
+      <a href="#curve">Curve</a>
+      <a href="#launchpad">Launchpad</a>
+      <a href="#limits">Limits</a>
+      <a href="#graduation">Graduation</a>
+      <a href="#trading">Trading</a>
+      <a href="#referrals">Referrals</a>
+      <a href="#security">Security</a>
+      <a href="#faq">FAQ</a>
+    </aside>
+
+    <main class="content">
+      <h1>Luxy Documentation</h1>
+      <p class="desc">A bonding-curve launchpad on Robinhood Chain. Deploy tokens, let the curve price them, and graduate into public liquidity — all on-chain, all deterministic.</p>
+
+      <section id="intro">
+        <h2>1. Introduction</h2>
+        <p>Luxy is a bonding-curve launchpad deployed on <strong>Robinhood Chain (chain ID 4663)</strong>. It lets anyone deploy a token in a single transaction, priced by a deterministic curve that reads on-chain state only.</p>
+        <p>There is no presale, no team allocation, and no special-access round. Every token follows the same four-state lifecycle: <strong>Deploy → Discover → Graduate → Earn</strong>.</p>
+        <h3>Key properties</h3>
+        <ul>
+          <li><strong>One-signature deploy.</strong> Token + curve contract deployed atomically.</li>
+          <li><strong>On-chain quotes.</strong> The swap screen reads the same function that executes your trade.</li>
+          <li><strong>Automatic graduation.</strong> At the reserve target, remaining supply + ETH are paired and seeded into a public AMM.</li>
+          <li><strong>Non-custodial.</strong> No funds ever sit with Luxy — trades settle directly against the curve or pool.</li>
+        </ul>
+      </section>
+
+      <section id="curve">
+        <h2>2. Bonding Curve</h2>
+        <p>The curve prices every buy and sell from on-chain reserves. Buys lift supply and push the quote up; sells return tokens and walk it back down.</p>
+        <div class="formula-box">
+          <div class="big">P(s) = P₀ + ΔP · s²</div>
+          <div class="vars">
+            P(s) — quote at supply s<br>
+            P₀ — starting price (floor)<br>
+            ΔP — curve steepness<br>
+            s — tokens sold so far
+          </div>
+        </div>
+        <h3>Why convex?</h3>
+        <p>A quadratic curve (s²) means early buyers get the best price, and the quote rises faster as supply approaches the target. Late entrants pay more — front-running buys you a worse price, not a better one.</p>
+        <h3>Quote execution</h3>
+        <p>Every quote — on the Swap page and inside each token's trade panel — reads the same <code>getQuote()</code> function. The quote you see is the exact calculation your trade will execute — not a separate off-chain estimate.</p>
+      </section>
+
+      <section id="launchpad">
+        <h2>3. Launchpad</h2>
+        <p>Deploying a token requires three things: a <strong>name</strong>, a <strong>ticker</strong>, and an optional <strong>description</strong>. That's it — no code, no reserved allocation, no whitelist.</p>
+        <h3>Deployment flow</h3>
+        <ul>
+          <li>User fills in name, ticker, and optional metadata (image, X link, Telegram, website).</li>
+          <li>One transaction deploys the token contract and its associated bonding-curve pricing contract atomically.</li>
+          <li>The token appears on the Launchpad immediately — listed but not yet tradeable until the first buy hits the curve.</li>
+        </ul>
+        <h3>Metadata</h3>
+        <p>Metadata (name, ticker, image, social links) is stored off-chain via the Luxy registry. The launchpad page displays it; the contract enforces the financial parameters.</p>
+      </section>
+
+      <section id="limits">
+        <h2>4. Trading Limits</h2>
+        <p>Every Luxy token ships with built-in trading guardrails, enforced at the contract level — not just in the interface.</p>
+        <table class="param-table">
+          <thead><tr><th>Parameter</th><th>Value</th><th>Enforcement</th></tr></thead>
+          <tbody>
+            <tr><td class="mono">Minimum buy</td><td>1 token</td><td>On transfer</td></tr>
+            <tr><td class="mono">Max buy per tx</td><td>5% of curve target</td><td>On swap</td></tr>
+            <tr><td class="mono">Max wallet</td><td>5% of total supply</td><td>On every transfer</td></tr>
+            <tr><td class="mono">Fee ceiling</td><td>5%</td><td>Hard-coded in contract</td></tr>
+          </tbody>
+        </table>
+        <h3>Max wallet enforcement</h3>
+        <p>The 5% wallet cap is checked on <em>every transfer</em> at the token contract level. A buy that would push a wallet over 5% reverts. Curve and pool addresses are exempt.</p>
+      </section>
+
+      <section id="graduation">
+        <h2>5. Graduation</h2>
+        <p>When the curve's reserve target is met, the token graduates into a public AMM. This is automatic — nobody triggers it, nobody can stop it.</p>
+        <h3>Graduation mechanics</h3>
+        <ul>
+          <li>At <strong>≈3.96 ETH reserve</strong>, the curve stops quoting — it will no longer accept buy/sell transactions.</li>
+          <li>Remaining token supply + collected ETH are paired at the migration ratio and deposited as opening liquidity in a <strong>Uniswap V3-style pool</strong>.</li>
+          <li>LP position is <strong>locked</strong> — tokens are never returned to the creator or burned.</li>
+          <li>Trading continues on the AMM. The curve at this point is done.</li>
+        </ul>
+        <h3>What happens to unsold tokens?</h3>
+        <p>Unsold tokens are paired with collected ETH and deposited as LP. Nothing sits idle — everything goes into the pool.</p>
+      </section>
+
+      <section id="trading">
+        <h2>6. Trading</h2>
+        <p>Trades are sized in <strong>exact-token</strong> or <strong>exact-ETH</strong> terms. The curve settles atomically — your signature includes a slippage floor, and a worse fill reverts.</p>
+        <h3>Slippage presets</h3>
+        <ul>
+          <li>0.5% · 1% · 3% presets for quick selection</li>
+          <li>Custom slippage supported</li>
+          <li>Minimum-received value is enforced on-chain</li>
+        </ul>
+        <h3>Post-graduation</h3>
+        <p>After graduation, trading moves to the AMM pool with standard swap mechanics. Slippage protection works the same way — your signed minimum-received guards against sandwiching.</p>
+      </section>
+
+      <section id="referrals">
+        <h2>7. Referrals</h2>
+        <p>Any wallet can register a referral code. Earn a share of protocol fees from every trade a referred wallet makes.</p>
+        <ul>
+          <li><strong>One code per referrer.</strong> Permanent once set.</li>
+          <li><strong>Tiered share.</strong> Your cut scales up as referred volume grows.</li>
+          <li><strong>Withdraw anytime.</strong> No lock, no minimum.</li>
+          <li>Referral accounting is on-chain and queryable via events.</li>
+        </ul>
+      </section>
+
+      <section id="security">
+        <h2>8. Security</h2>
+        <p>Luxy is <strong>non-custodial at execution</strong>, not governance-free. The boundary between code guarantees and administrative controls is documented below.</p>
+        <h3>Contract guarantees</h3>
+        <ul>
+          <li><strong>Trade pricing.</strong> Priced by the curve contract, settled atomically.</li>
+          <li><strong>Slippage protection.</strong> Signed minimum-received is checked on-chain.</li>
+          <li><strong>Max wallet.</strong> The 5% cap is enforced on every transfer.</li>
+          <li><strong>Pool protection.</strong> The destination pool exists before the token is public and stays locked until the curve completes.</li>
+        </ul>
+        <h3>Governance scope</h3>
+        <ul>
+          <li>Launch access can be paused or gated behind approval.</li>
+          <li>Specific addresses can be blocked from trading (platform tool, not creator control).</li>
+          <li>Fee parameters for new launches are set by governance, within hard-coded contract limits.</li>
+        </ul>
+        <h3>Agent key isolation (if applicable)</h3>
+        <p>Any off-chain agent used for recommendations holds a separate signer that <strong>cannot move tokens</strong> — it can only publish opinions on-chain.</p>
+      </section>
+
+      <section id="faq">
+        <h2>9. FAQ</h2>
+        <h3>Why didn't my quote exactly match my fill?</h3>
+        <p>The quote reflects curve state at the moment you asked for it. Any trade that lands before yours moves the price — that's what your slippage tolerance bounds.</p>
+        <h3>Why can't I buy more of a token?</h3>
+        <p>You've likely hit the per-transaction cap (5% of target) or the max-wallet limit (5% of supply). Split buys across multiple transactions.</p>
+        <h3>What happens to unsold curve tokens at graduation?</h3>
+        <p>Remaining supply + collected ETH are paired and deposited as opening liquidity. Nothing is returned or burned.</p>
+        <h3>Does staking pay a fixed rate?</h3>
+        <p>No. Displayed APR is a snapshot that moves with emissions, LP price, and participation. Treat it as an estimate.</p>
+        <h3>What chain is Luxy on?</h3>
+        <p>Luxy is deployed exclusively on <strong>Robinhood Chain (chain ID 4663)</strong>.</p>
+      </section>
+    </main>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap footer-row">
+    <span>LUXY · ROBINHOOD CHAIN · DOCS REV. 2026-07</span>
+    <span><a href="index.html" style="color:inherit;">← Luxy App</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
