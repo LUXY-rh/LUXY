@@ -1628,11 +1628,13 @@
   }
   async function connectWallet(name){
     if(name === 'MetaMask' || name === 'Rabby' || name === 'OKX'){
-      var provider = name === 'OKX' ? window.okxwallet : window.ethereum;
-      if(typeof provider !== 'undefined'){
+      var provider = null;
+      if(name === 'OKX' && window.okxwallet) provider = window.okxwallet;
+      else if(window.ethereum) provider = window.ethereum;
+      if(provider){
         try{
           var accounts = await provider.request({method:'eth_requestAccounts'});
-          if(accounts.length > 0){
+          if(accounts && accounts.length > 0){
             closeWallet();
             updateWalletUI(accounts[0]);
             // Switch to Robinhood Chain 4663
@@ -1641,10 +1643,12 @@
             showToast('Connected to ' + name + ' · Robinhood Chain 4663');
             return;
           }
-        }catch(e){ console.log('Wallet connection failed:', e); }
+        }catch(e){ console.log('Wallet error:', e); showToast('Connection failed — ' + e.message); return; }
       }
+      showToast(name + ' not detected. Please install the extension.');
+      return;
     }
-    // Fallback: mock connection
+    // WalletConnect / Coinbase — mock
     closeWallet();
     var addr = '0x' + Math.random().toString(16).slice(2, 42);
     updateWalletUI(addr);
