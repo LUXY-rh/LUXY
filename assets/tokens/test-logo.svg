@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1F4B8F"/>
+      <stop offset="100%" style="stop-color:#4A90D9"/>
+    </linearGradient>
+  </defs>
+  <rect width="200" height="200" rx="40" fill="url(#g)"/>
+  <text x="100" y="118" text-anchor="middle" font-family="IBM Plex Mono, monospace" font-weight="700" font-size="80" fill="#EDE9DC" letter-spacing="-2">TEST</text>
+</svg>

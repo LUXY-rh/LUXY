@@ -1,0 +1,1715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxy · Fair launches on Robinhood Chain</title>
+<link rel="icon" type="image/png" href="assets/brand/luxy-logo.png">
+<link rel="apple-touch-icon" href="assets/brand/luxy-logo.png">
+<meta name="description" content="Luxy — Fair token launches on Robinhood Chain. Deploy in one signature, let a bonding curve discover price, graduate into public liquidity.">
+<meta property="og:title" content="Luxy · Fair launches on Robinhood Chain">
+<meta property="og:description" content="A bonding-curve launchpad on Robinhood Chain (4663). Deploy, discover, graduate, earn — one deterministic state machine.">
+<meta property="og:type" content="website">
+<meta property="og:image" content="https://luxy-rh.com/assets/og-image.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Luxy · Fair launches on Robinhood Chain">
+<meta name="twitter:description" content="Deploy in one signature. Curve pricing. No presale. Robinhood Chain.">
+<meta name="twitter:image" content="https://luxy-rh.com/assets/og-image.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #EDE9DC;
+    --paper-2: #E4DFCE;
+    --ink: #1B2233;
+    --ink-soft: #3A4256;
+    --muted: #767C8C;
+    --grid: #CFC8B2;
+    --grid-strong: #B9B097;
+    --cobalt: #1F4B8F;
+    --cobalt-deep: #163564;
+    --sienna: #A24A22;
+    --paper-rgb: 237,233,220;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  html{scroll-behavior:smooth;}
+
+  body{
+    background:
+      linear-gradient(var(--paper),var(--paper)),
+      repeating-linear-gradient(0deg, var(--grid) 0px, var(--grid) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--grid) 0px, var(--grid) 1px, transparent 1px, transparent 32px);
+    color: var(--ink);
+    font-family: 'IBM Plex Sans', sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  ::selection{ background: var(--cobalt); color: var(--paper); }
+
+  a{ color: inherit; text-decoration:none; }
+
+  .mono{ font-family:'IBM Plex Mono', monospace; }
+
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--cobalt-deep);
+    display:flex;
+    align-items:center;
+    gap:10px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:16px; height:1px; background: var(--cobalt-deep);
+    display:inline-block;
+  }
+
+  h1,h2,h3{
+    font-family:'Fraunces', serif;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--ink);
+  }
+
+  p{ color: var(--ink-soft); }
+
+  /* ---------- NAV ---------- */
+  header{
+    position: sticky; top:0; z-index: 50;
+    background: rgba(var(--paper-rgb), 0.86);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--grid-strong);
+  }
+  nav.wrap{
+    display:flex; align-items:center; justify-content:space-between;
+    height:72px;
+  }
+  .logo{
+    display:flex; align-items:center; gap:10px;
+    font-family:'Fraunces', serif; font-weight:700; font-size:21px;
+    letter-spacing: -0.02em;
+  }
+  .logo .mark{
+    width:26px; height:26px;
+    position:relative;
+    flex-shrink:0;
+  }
+  .logo .mark svg{ width:100%; height:100%; display:block; }
+
+  .navlinks{ display:flex; align-items:center; gap:34px; }
+  .navlinks a{
+    font-size:14px; color: var(--ink-soft); font-weight:500;
+    transition: color .15s ease;
+    position:relative;
+  }
+  .navlinks a:hover{ color: var(--cobalt); }
+
+  .navcta{ display:flex; align-items:center; gap:14px; }
+  .btn{
+    font-family:'IBM Plex Sans', sans-serif;
+    font-size:14px; font-weight:600;
+    padding: 10px 18px;
+    border-radius: 3px;
+    border: 1px solid var(--ink);
+    cursor:pointer;
+    transition: all .15s ease;
+    display:inline-flex; align-items:center; gap:8px;
+  }
+  .btn-primary{
+    background: var(--cobalt); border-color: var(--cobalt); color: var(--paper);
+  }
+  .btn-primary:hover{ background: var(--cobalt-deep); border-color: var(--cobalt-deep); }
+  .btn-ghost{
+    background: transparent; border-color: var(--grid-strong); color: var(--ink);
+  }
+  .btn-ghost:hover{ border-color: var(--ink); }
+  .btn-line{
+    background:transparent; border:none; color:var(--cobalt-deep);
+    padding: 0; font-weight:600; font-size:14px;
+    display:inline-flex; align-items:center; gap:6px;
+    border-bottom: 1px solid var(--cobalt-deep);
+    border-radius:0;
+  }
+  .btn-line:hover{ gap:10px; }
+
+  @media(max-width: 900px){
+    .navlinks{ display:none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding: 88px 0 60px;
+    position: relative;
+  }
+  .hero-top{
+    display:flex; align-items:center; gap:16px; margin-bottom: 28px;
+    flex-wrap:wrap;
+  }
+  .chip{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11px; letter-spacing:.06em;
+    border:1px solid var(--grid-strong);
+    padding: 5px 10px; border-radius: 2px;
+    color: var(--ink-soft);
+    display:flex; align-items:center; gap:6px;
+  }
+  .chip .dot{ width:6px; height:6px; border-radius:50%; background:var(--cobalt); }
+
+  .hero-grid{
+    display:grid;
+    grid-template-columns: 1.05fr 0.95fr;
+    gap: 56px;
+    align-items:center;
+  }
+  @media(max-width: 980px){
+    .hero-grid{ grid-template-columns:1fr; }
+  }
+
+  .hero h1{
+    font-size: clamp(38px, 5vw, 62px);
+    line-height: 1.02;
+    margin-bottom: 22px;
+  }
+  .hero h1 em{
+    font-style: italic; color: var(--cobalt);
+  }
+  .hero p.lede{
+    font-size:17px; max-width: 480px; margin-bottom: 30px;
+  }
+  .hero-actions{ display:flex; gap:14px; align-items:center; flex-wrap:wrap; margin-bottom:22px;}
+  .hero-fine{
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 12px; color: var(--muted);
+  }
+
+  /* ---------- CURVE DIAGRAM ---------- */
+  .diagram{
+    position: relative;
+    border: 1px solid var(--grid-strong);
+    background: rgba(255,255,255,0.28);
+    border-radius: 4px;
+    padding: 22px;
+  }
+  .diagram-label{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--muted);
+    margin-bottom: 8px; letter-spacing:.04em;
+  }
+  .diagram svg{ width:100%; height:auto; display:block; }
+
+  .curve-path{
+    fill:none; stroke: var(--cobalt); stroke-width:2.5;
+    stroke-dasharray: 900; stroke-dashoffset: 900;
+    animation: draw 2.2s ease forwards .3s;
+  }
+  @keyframes draw{ to{ stroke-dashoffset:0; } }
+
+  .curve-fill{
+    fill: var(--cobalt); opacity: 0.07;
+  }
+
+  .leader{ stroke: var(--grid-strong); stroke-width:1; stroke-dasharray: 3 3; }
+  .leader-dot{ fill: var(--sienna); }
+  .leader-text{
+    font-family:'IBM Plex Mono', monospace; font-size: 10.5px; fill: var(--ink-soft);
+  }
+  .leader-text.strong{ fill: var(--ink); font-weight:600; }
+
+  .diagram-params{
+    display:grid; grid-template-columns: repeat(4,1fr); gap:0;
+    margin-top: 18px; border-top: 1px solid var(--grid-strong);
+  }
+  .param{
+    padding: 12px 10px 0; border-right: 1px solid var(--grid-strong);
+  }
+  .param:last-child{ border-right:none; }
+  .param .val{ font-family:'IBM Plex Mono', monospace; font-weight:600; font-size:15px; color:var(--ink); }
+  .param .lbl{ font-size: 10.5px; color: var(--muted); margin-top: 3px; letter-spacing:.02em;}
+
+  @media(max-width:560px){
+    .diagram-params{ grid-template-columns: repeat(2,1fr); }
+    .param{ border-bottom:1px solid var(--grid-strong); padding-bottom:10px; margin-bottom:2px;}
+  }
+
+  /* ---------- SECTION SHARED ---------- */
+  section{ padding: 84px 0; }
+  .section-head{
+    max-width: 640px; margin-bottom: 52px;
+  }
+  .section-head h2{ font-size: clamp(28px,3.4vw,40px); margin: 14px 0 14px; }
+  .section-head p{ font-size:16px; }
+  .divider{
+    border:none; border-top:1px solid var(--grid-strong);
+  }
+
+  /* ---------- PROCESS (sheets) ---------- */
+  .sheets{
+    display:grid; grid-template-columns: repeat(4, 1fr);
+    border: 1px solid var(--grid-strong);
+    border-radius: 4px;
+    overflow:hidden;
+  }
+  @media(max-width: 900px){ .sheets{ grid-template-columns: 1fr 1fr; } }
+  @media(max-width: 560px){ .sheets{ grid-template-columns: 1fr; } }
+
+  .sheet{
+    padding: 28px 24px;
+    border-right: 1px solid var(--grid-strong);
+    background: rgba(255,255,255,0.2);
+    display:flex; flex-direction:column;
+  }
+  .sheet:last-child{ border-right:none; }
+  .sheet:nth-child(even){ background: rgba(255,255,255,0.42); }
+
+  .sheet .num{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color: var(--muted);
+    margin-bottom: 18px;
+  }
+  .sheet h3{ font-size:21px; margin-bottom:10px; }
+  .sheet p{ font-size: 14px; margin-bottom: 18px; flex-grow:1; }
+
+  .sheet-spec{
+    font-family:'IBM Plex Mono', monospace; font-size:12px;
+    border-top: 1px dashed var(--grid-strong);
+    padding-top: 12px; margin-top:auto;
+    color: var(--ink-soft);
+  }
+  .sheet-spec div{ display:flex; justify-content:space-between; margin-bottom:6px; }
+  .sheet-spec span:last-child{ color: var(--ink); font-weight:600; }
+
+  /* ---------- FORMULA BLOCK ---------- */
+  .formula-block{
+    display:grid; grid-template-columns: 0.85fr 1.15fr; gap:48px; align-items:center;
+    border: 1px solid var(--grid-strong); border-radius:4px; padding: 44px;
+    background: rgba(255,255,255,0.28);
+  }
+  @media(max-width:900px){ .formula-block{ grid-template-columns:1fr; } }
+  .formula-big{
+    font-family:'Fraunces', serif; font-size: clamp(30px,4vw,44px);
+    font-style: italic; color: var(--cobalt-deep);
+    margin-bottom: 18px;
+  }
+  .formula-block p{ font-size:15px; }
+  .formula-legend{
+    margin-top:18px; font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--muted);
+    line-height:1.9;
+  }
+
+  /* ---------- CAPABILITIES ---------- */
+  .cap-grid{
+    display:grid; grid-template-columns: repeat(3,1fr); gap:1px;
+    background: var(--grid-strong);
+    border: 1px solid var(--grid-strong);
+  }
+  @media(max-width:900px){ .cap-grid{ grid-template-columns: repeat(2,1fr); } }
+  @media(max-width:600px){ .cap-grid{ grid-template-columns: 1fr; } }
+  .cap{
+    background: var(--paper); padding: 30px 26px;
+  }
+  .cap .idx{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--muted); margin-bottom:14px; }
+  .cap h3{ font-size:18px; margin-bottom:10px; font-weight:600; }
+  .cap p{ font-size:13.5px; margin-bottom:14px; }
+  .cap ul{ list-style:none; margin-bottom:16px; }
+  .cap ul li{
+    font-size:12.5px; color:var(--ink-soft); padding-left:14px; position:relative; margin-bottom:6px;
+  }
+  .cap ul li::before{ content:'—'; position:absolute; left:0; color:var(--grid-strong); }
+  .cap a.btn-line{ font-size:13px; }
+
+  /* ---------- TRUST ---------- */
+  .trust-grid{
+    display:grid; grid-template-columns: 1fr 1fr; gap: 0;
+    border: 1px solid var(--grid-strong); border-radius:4px; overflow:hidden;
+  }
+  @media(max-width:820px){ .trust-grid{ grid-template-columns:1fr; } }
+  .trust-col{ padding: 34px; }
+  .trust-col.contract{ background: rgba(31,75,143,0.06); border-right:1px solid var(--grid-strong); }
+  .trust-col.gov{ background: rgba(162,74,34,0.05); }
+  @media(max-width:820px){ .trust-col.contract{ border-right:none; border-bottom:1px solid var(--grid-strong);} }
+
+  .trust-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    padding: 4px 9px; border-radius:2px; display:inline-block; margin-bottom:14px;
+  }
+  .contract .trust-tag{ background: var(--cobalt); color: var(--paper); }
+  .gov .trust-tag{ background: var(--sienna); color: var(--paper); }
+
+  .trust-col h3{ font-size:20px; margin-bottom:18px; }
+  .trust-item{ padding: 14px 0; border-top:1px solid var(--grid-strong); }
+  .trust-item:first-of-type{ border-top:none; }
+  .trust-item h4{ font-size:14.5px; font-weight:600; margin-bottom:5px; font-family:'IBM Plex Sans',sans-serif; }
+  .trust-item p{ font-size:13px; }
+
+  /* ---------- FAQ ---------- */
+  .faq-item{
+    border-bottom: 1px solid var(--grid-strong);
+  }
+  .faq-item:first-child{ border-top: 1px solid var(--grid-strong); }
+  .faq-q{
+    display:flex; justify-content:space-between; align-items:center; gap:20px;
+    padding: 22px 4px; cursor:pointer;
+  }
+  .faq-q .num{ font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--muted); margin-right:14px; }
+  .faq-q h3{ font-size:16px; font-weight:600; font-family:'IBM Plex Sans',sans-serif; flex-grow:1; }
+  .faq-q .plus{
+    font-family:'IBM Plex Mono', monospace; font-size:18px; color:var(--cobalt); transition: transform .2s ease;
+    flex-shrink:0;
+  }
+  .faq-item.open .plus{ transform: rotate(45deg); }
+  .faq-a{
+    max-height:0; overflow:hidden; transition: max-height .25s ease;
+  }
+  .faq-item.open .faq-a{ max-height: 200px; }
+  .faq-a p{ padding: 0 4px 24px 40px; font-size:14.5px; max-width:640px; }
+
+  /* ---------- FINAL CTA ---------- */
+  .final-cta{
+    text-align:center; border:1px solid var(--grid-strong); border-radius:4px;
+    padding: 64px 32px; background: rgba(255,255,255,0.3);
+  }
+  .final-cta h2{ font-size: clamp(28px,4vw,42px); margin-bottom:16px; }
+  .final-cta p{ max-width:480px; margin: 0 auto 30px; }
+  .final-actions{ display:flex; gap:14px; justify-content:center; flex-wrap:wrap; }
+
+  /* ---------- FOOTER ---------- */
+  footer{ border-top: 1px solid var(--grid-strong); padding: 48px 0 40px; }
+  .footer-grid{ display:flex; justify-content:space-between; gap:40px; flex-wrap:wrap; }
+  .footer-brand p{ font-size:13px; max-width:280px; margin-top:10px; color:var(--muted); }
+  .footer-docs h4{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; letter-spacing:.08em; text-transform:uppercase;
+    color: var(--muted); margin-bottom:14px;
+  }
+  .footer-docs .docs-list{ columns:2; column-gap: 34px; }
+  .footer-docs a{
+    display:block; font-size:13.5px; margin-bottom:9px; color:var(--ink-soft);
+  }
+  .footer-docs a:hover{ color: var(--cobalt); }
+  .footer-bottom{
+    margin-top:40px; padding-top:20px; border-top:1px solid var(--grid-strong);
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; color:var(--muted);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+
+  .reveal{
+    opacity:0; transform: translateY(14px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .reveal.in{ opacity:1; transform:none; }
+
+  @media (prefers-reduced-motion: reduce){
+    .curve-path{ animation:none; stroke-dashoffset:0; }
+    .reveal{ transition:none; opacity:1; transform:none; }
+  }
+
+  :focus-visible{ outline: 2px solid var(--cobalt); outline-offset: 2px; }
+
+  /* ── Splash Screen ── */
+  #splash-overlay{
+    position:fixed; inset:0; z-index:9999;
+    background:
+      linear-gradient(var(--paper),var(--paper)),
+      repeating-linear-gradient(0deg, var(--grid) 0px, var(--grid) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--grid) 0px, var(--grid) 1px, transparent 1px, transparent 32px);
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:22px;
+    transition: opacity .5s ease;
+  }
+  #splash-overlay.hidden{ opacity:0; pointer-events:none; }
+  #splash-overlay .s-mark{ width:96px; height:96px; position:relative; }
+  #splash-overlay .s-mark svg{ width:100%; height:100%; display:block; animation:fadeIn .6s ease forwards; }
+  @keyframes fadeIn{ from{ opacity:0; transform:scale(.95); } to{ opacity:1; transform:scale(1); } }
+  #splash-overlay .s-wordmark{ font-family:'Fraunces',serif; font-weight:700; font-size:34px; letter-spacing:-.02em; color:var(--ink); }
+  #splash-overlay .s-status{ font-size:11px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); display:flex; align-items:center; gap:8px; }
+  #splash-overlay .s-dot{ width:6px; height:6px; border-radius:50%; background:var(--cobalt); animation:pulse-splash 1.2s ease-in-out infinite; }
+  @keyframes pulse-splash{ 0%,100%{ opacity:.25; transform:scale(.85); } 50%{ opacity:1; transform:scale(1); } }
+  #splash-overlay .s-bar{ width:180px; height:2px; background:var(--grid-strong); position:relative; overflow:hidden; border-radius:1px; }
+  #splash-overlay .s-bar::after{ content:''; position:absolute; top:0; left:0; height:100%; width:40%; background:var(--cobalt); animation:slide-splash 1.4s ease-in-out infinite; }
+  @keyframes slide-splash{ 0%{ left:-40%; } 100%{ left:100%; } }
+
+  /* ── Modal / Create Token ── */
+  #modal-overlay{
+    position:fixed; inset:0; z-index:10000;
+    background:rgba(27,34,51,0.72); backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  #modal-overlay.open{ opacity:1; pointer-events:auto; }
+  #modal-dialog{
+    background:var(--paper);
+    border:1px solid var(--grid-strong);
+    border-radius:4px;
+    padding:36px 32px;
+    width:min(460px, 92vw);
+    box-shadow:0 24px 64px rgba(0,0,0,.18);
+  }
+  #modal-dialog h2{ font-family:'Fraunces',serif; font-size:24px; margin-bottom:6px; }
+  #modal-dialog .sub{ font-size:13px; color:var(--muted); margin-bottom:22px; }
+  #modal-dialog .field{ margin-bottom:18px; }
+  #modal-dialog .field label{
+    display:block; font-family:'IBM Plex Mono',monospace; font-size:11px;
+    letter-spacing:.06em; text-transform:uppercase; color:var(--ink-soft); margin-bottom:6px;
+  }
+  #modal-dialog .field input, #modal-dialog .field textarea{
+    width:100%; padding:10px 12px; border:1px solid var(--grid-strong);
+    border-radius:3px; font-family:'IBM Plex Sans',sans-serif; font-size:14px;
+    background:rgba(255,255,255,0.6); color:var(--ink);
+    transition:border-color .15s;
+  }
+  #modal-dialog .field input:focus, #modal-dialog .field textarea:focus{
+    outline:none; border-color:var(--cobalt);
+  }
+  #modal-dialog .field textarea{ resize:vertical; min-height:60px; }
+  #modal-dialog .actions{ display:flex; gap:10px; justify-content:flex-end; margin-top:24px; }
+  #modal-dialog .btn-cancel{
+    padding:9px 16px; border:1px solid var(--grid-strong); border-radius:3px;
+    background:transparent; font-size:13px; cursor:pointer; color:var(--ink-soft);
+  }
+  #modal-dialog .btn-submit{
+    padding:9px 20px; border:none; border-radius:3px;
+    background:var(--cobalt); color:var(--paper); font-size:13px; font-weight:600;
+    cursor:pointer; transition:background .15s;
+  }
+  #modal-dialog .btn-submit:hover{ background:var(--cobalt-deep); }
+  /* Logo upload */
+  .logo-upload{
+    display:flex; align-items:center; gap:14px; margin-bottom:4px;
+  }
+  .logo-preview{
+    width:52px; height:52px; border-radius:50%; flex-shrink:0;
+    border:2px dashed var(--grid-strong);
+    display:flex; align-items:center; justify-content:center;
+    background:rgba(255,255,255,0.4); overflow:hidden;
+    transition:border-color .15s;
+  }
+  .logo-preview img{ width:100%; height:100%; object-fit:cover; display:none; }
+  .logo-preview .logo-placeholder{
+    font-size:10px; color:var(--muted); text-align:center; line-height:1.3;
+  }
+  .logo-preview.has-image{ border-style:solid; border-color:var(--cobalt); }
+  .logo-preview.has-image img{ display:block; }
+  .logo-preview.has-image .logo-placeholder{ display:none; }
+  .logo-upload-btn{
+    font-family:'IBM Plex Sans',sans-serif; font-size:12px; font-weight:600;
+    padding:7px 14px; border-radius:3px; cursor:pointer;
+    border:1px solid var(--grid-strong); background:rgba(255,255,255,0.4);
+    color:var(--ink-soft); transition:all .15s;
+  }
+  .logo-upload-btn:hover{ border-color:var(--cobalt); color:var(--cobalt); }
+  .logo-upload input[type=file]{ display:none; }
+  .logo-hint{ font-size:11px; color:var(--muted); margin-top:2px; }
+  /* Dev buy row */
+  .dev-buy-row{
+    display:flex; gap:10px; align-items:flex-end;
+  }
+  .dev-buy-row .field{ flex:1; }
+  #modal-toast{
+    position:fixed; bottom:28px; left:50%; transform:translateX(-50%); z-index:10001;
+    background:var(--ink); color:var(--paper); font-family:'IBM Plex Mono',monospace;
+    font-size:12px; letter-spacing:.04em; padding:12px 24px; border-radius:3px;
+    opacity:0; transition:opacity .3s ease; pointer-events:none;
+  }
+  #modal-toast.show{ opacity:1; }
+
+  /* ── Token Detail Panel ── */
+  #detail-overlay{
+    position:fixed; inset:0; z-index:10002;
+    background:rgba(27,34,51,0.78); backdrop-filter:blur(8px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  #detail-overlay.open{ opacity:1; pointer-events:auto; }
+  #detail-panel{
+    background:var(--paper);
+    border:1px solid var(--grid-strong);
+    border-radius:6px;
+    width:min(720px, 94vw); max-height:88vh; overflow-y:auto;
+    box-shadow:0 32px 80px rgba(0,0,0,.22);
+  }
+  .detail-header{
+    padding:24px 28px; border-bottom:1px solid var(--grid);
+    display:flex; align-items:center; justify-content:space-between; gap:16px;
+    position:sticky; top:0; background:var(--paper); z-index:1;
+  }
+  .detail-header-left{ display:flex; align-items:center; gap:14px; }
+  .detail-avatar{
+    width:48px; height:48px; border-radius:50%; overflow:hidden; flex-shrink:0;
+    background:linear-gradient(135deg,var(--cobalt),var(--cobalt-deep));
+    display:flex; align-items:center; justify-content:center;
+    font-size:16px; font-weight:700; color:var(--paper);
+    font-family:'IBM Plex Mono',monospace;
+  }
+  .detail-avatar img{ width:100%; height:100%; object-fit:cover; }
+  .detail-header h3{ font-family:'Fraunces',serif; font-size:22px; }
+  .detail-header .ticker{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); }
+  .detail-header .addr{ font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); margin-top:2px; }
+  .detail-close{
+    background:none; border:1px solid var(--grid-strong); border-radius:3px;
+    width:32px; height:32px; display:flex; align-items:center; justify-content:center;
+    cursor:pointer; font-size:16px; color:var(--muted); transition:all .15s;
+    flex-shrink:0;
+  }
+  .detail-close:hover{ border-color:var(--ink); color:var(--ink); }
+  .detail-body{ padding:24px 28px; }
+  .detail-stats{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:1px;
+    background:var(--grid-strong); border:1px solid var(--grid-strong); border-radius:4px;
+    overflow:hidden; margin-bottom:24px;
+  }
+  @media(max-width:560px){ .detail-stats{ grid-template-columns:repeat(2,1fr); } }
+  .detail-stat{
+    background:rgba(255,255,255,0.35); padding:14px 16px;
+  }
+  .detail-stat .lbl{ font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.05em; color:var(--muted); text-transform:uppercase; margin-bottom:4px; }
+  .detail-stat .val{ font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:15px; color:var(--ink); }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  .detail-chart{
+    border:1px solid var(--grid-strong); border-radius:4px;
+    padding:16px; background:rgba(255,255,255,0.25);
+    flex:1;
+  }
+  .detail-chart-label{
+    font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted);
+    letter-spacing:.04em; margin-bottom:10px; display:flex; justify-content:space-between;
+  }
+  .detail-chart svg{ width:100%; height:auto; display:block; }
+  /* Two-col layout */
+  .detail-two-col{ display:flex; gap:16px; margin-bottom:24px; }
+  @media(max-width:640px){ .detail-two-col{ flex-direction:column; } }
+  .detail-trade-col{
+    width:220px; flex-shrink:0;
+    border:1px solid var(--grid-strong); border-radius:4px;
+    padding:16px; background:rgba(255,255,255,0.25);
+  }
+  @media(max-width:640px){ .detail-trade-col{ width:100%; } }
+  .d-trade-input{
+    width:100%; padding:10px 12px; border:1px solid var(--grid-strong);
+    border-radius:3px; font-family:'IBM Plex Mono',monospace; font-size:14px;
+    background:rgba(255,255,255,0.6); color:var(--ink);
+  }
+  .d-trade-input:focus{ outline:none; border-color:var(--cobalt); }
+  .d-pct-btn{
+    padding:4px 8px; border:1px solid var(--grid-strong); border-radius:3px;
+    background:transparent; font-family:'IBM Plex Mono',monospace; font-size:11px;
+    cursor:pointer; color:var(--ink-soft); transition:all .12s;
+  }
+  .d-pct-btn:hover{ border-color:var(--cobalt); color:var(--cobalt); }
+  .d-link-btn{
+    display:inline-flex; align-items:center; gap:5px;
+    font-family:'IBM Plex Mono',monospace; font-size:10.5px;
+    text-decoration:none; padding:4px 9px; border-radius:3px;
+    border:1px solid; transition:all .15s;
+  }
+  .d-link-explorer{ color:var(--cobalt); border-color:rgba(31,75,143,0.2); }
+  .d-link-explorer:hover{ background:rgba(31,75,143,0.06); }
+  .d-link-analytics{ color:var(--sienna); border-color:rgba(162,74,34,0.2); }
+  .d-link-analytics:hover{ background:rgba(162,74,34,0.06); }
+  /* Graduation progress */
+  .detail-grad-wrap{ margin-bottom:24px; }
+  .detail-grad-header,.detail-grad-footer{
+    display:flex; justify-content:space-between; align-items:center;
+  }
+  .detail-grad-bar{
+    height:8px; background:var(--grid); border-radius:4px;
+    overflow:hidden; margin:6px 0;
+  }
+  .detail-grad-fill{ height:100%; border-radius:4px; transition:width .6s ease; }
+  .detail-grad-fill.curving{ background:var(--cobalt); }
+  .detail-grad-fill.done{ background:var(--sienna); }
+  /* Holder % bars */
+  .hold-pct-bar{
+    display:inline-block; width:60px; height:6px; background:var(--grid);
+    border-radius:3px; overflow:hidden; vertical-align:middle; margin-right:6px;
+  }
+  .hold-pct-fill{ height:100%; border-radius:3px; background:var(--cobalt); }
+  .mono{ font-family:'IBM Plex Mono',monospace; }
+  /* Buy / Sell */
+  .trade-row{
+    display:flex; gap:12px; margin-bottom:24px; align-items:flex-end;
+    padding:18px; border:1px solid var(--grid-strong); border-radius:4px;
+    background:rgba(255,255,255,0.25);
+  }
+  .trade-row .field{ flex:1; margin-bottom:0; }
+  .trade-row .field label{ font-size:10px; }
+  .trade-row .field input{
+    font-family:'IBM Plex Mono',monospace; font-size:14px;
+  }
+  .btn-buy,.btn-sell{
+    padding:10px 22px; border:none; border-radius:3px;
+    font-family:'IBM Plex Sans',sans-serif; font-size:13px; font-weight:600;
+    cursor:pointer; transition:all .15s; white-space:nowrap;
+  }
+  .btn-buy{ background:#1a7a3a; color:#fff; }
+  .btn-buy:hover{ background:#145a2a; }
+  .btn-sell{ background:#b91c1c; color:#fff; }
+  .btn-sell:hover{ background:#8b1515; }
+  /* Detail tabs */
+  .detail-tabs{
+    display:flex; gap:0; border:1px solid var(--grid-strong); border-radius:3px;
+    overflow:hidden; width:fit-content; margin-bottom:16px;
+  }
+  .detail-tabs button{
+    padding:8px 16px; border:none; background:transparent;
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px;
+    font-weight:600; letter-spacing:.04em; color:var(--ink-soft);
+    cursor:pointer; transition:all .15s;
+    border-right:1px solid var(--grid-strong);
+  }
+  .detail-tabs button:last-child{ border-right:none; }
+  .detail-tabs button.active{ background:var(--cobalt); color:var(--paper); }
+  .detail-tabs button:hover:not(.active){ color:var(--cobalt); }
+  .holder-table,.trade-table{
+    width:100%; border-collapse:collapse; font-size:13px;
+  }
+  .holder-table th,.trade-table th{
+    text-align:left; padding:9px 12px; border-bottom:1px solid var(--grid-strong);
+    font-family:'IBM Plex Mono',monospace; font-size:10px; letter-spacing:.05em;
+    color:var(--muted); text-transform:uppercase;
+  }
+  .holder-table td,.trade-table td{ padding:9px 12px; border-bottom:1px solid var(--grid); }
+  .holder-table .rank{ font-family:'IBM Plex Mono',monospace; font-size:12px; color:var(--muted); width:40px; }
+  .trade-table .type-buy{ color:#1a7a3a; font-weight:600; }
+  .trade-table .type-sell{ color:#b91c1c; font-weight:600; }
+
+  /* ── Connect Wallet ── */
+  #wallet-overlay{
+    position:fixed; inset:0; z-index:10001; background:rgba(27,34,51,0.72); backdrop-filter:blur(6px);
+    display:flex; align-items:center; justify-content:center;
+    opacity:0; pointer-events:none; transition:opacity .25s ease;
+  }
+  #wallet-overlay.open{ opacity:1; pointer-events:auto; }
+  #wallet-dialog{
+    background:var(--paper); border:1px solid var(--grid-strong); border-radius:4px;
+    padding:32px; width:min(380px,90vw); box-shadow:0 24px 64px rgba(0,0,0,.18);
+  }
+  #wallet-dialog h2{ font-family:'Fraunces',serif; font-size:22px; margin-bottom:6px; }
+  #wallet-dialog .sub{ font-size:13px; color:var(--muted); margin-bottom:20px; }
+  .wallet-option{
+    display:flex; align-items:center; gap:14px; width:100%; padding:14px 16px;
+    border:1px solid var(--grid-strong); border-radius:3px; background:rgba(255,255,255,0.4);
+    cursor:pointer; transition:all .15s; margin-bottom:8px; font-family:'IBM Plex Sans',sans-serif;
+  }
+  .wallet-option:hover{ border-color:var(--cobalt); background:rgba(31,75,143,0.04); }
+  .wallet-option .w-icon{
+    width:32px; height:32px; border-radius:6px; display:flex; align-items:center; justify-content:center;
+    font-size:18px; flex-shrink:0;
+  }
+  .wallet-option .w-name{ font-weight:600; font-size:14px; color:var(--ink); }
+  .wallet-option .w-tag{ font-size:10px; color:var(--muted); }
+
+  /* ── Launches / Token Grid ── */
+  .token-grid{
+    display:grid; grid-template-columns:repeat(3,1fr); gap:1px;
+    background:var(--grid-strong); border:1px solid var(--grid-strong);
+    border-radius:4px; overflow:hidden;
+  }
+  @media(max-width:1000px){ .token-grid{ grid-template-columns:repeat(2,1fr); } }
+  @media(max-width:600px){ .token-grid{ grid-template-columns:1fr; } }
+  .token-card{
+    background:rgba(255,255,255,0.4); padding:20px;
+    cursor:pointer; transition:all .15s ease;
+    display:flex; flex-direction:column; gap:12px;
+  }
+  .token-card:hover{ background:rgba(31,75,143,0.04); }
+  .token-card:active{ background:rgba(31,75,143,0.08); }
+  .token-card .t-top{
+    display:flex; align-items:center; gap:12px;
+  }
+  .token-card .t-avatar{
+    width:42px; height:42px; border-radius:50%; flex-shrink:0;
+    display:flex; align-items:center; justify-content:center;
+    font-size:14px; font-weight:700; color:var(--paper);
+    font-family:'IBM Plex Mono',monospace;
+    position:relative; overflow:hidden;
+  }
+  .token-card .t-avatar img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .token-card .t-avatar .avatar-fallback{
+    width:100%; height:100%; display:flex; align-items:center; justify-content:center;
+    position:absolute; inset:0;
+    background:linear-gradient(135deg,var(--cobalt),var(--cobalt-deep));
+  }
+  .token-card .t-avatar .live-dot{
+    position:absolute; bottom:-1px; right:-1px;
+    width:9px; height:9px; border-radius:50%;
+    background:#1a7a3a; border:2px solid var(--paper);
+    animation:pulse-live 1.6s ease-in-out infinite;
+  }
+  @keyframes pulse-live{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:.5; transform:scale(.75); }
+  }
+  .token-card .t-name{ font-weight:600; color:var(--ink); font-size:14px; line-height:1.2; }
+  .token-card .t-ticker{ font-size:11px; color:var(--muted); font-family:'IBM Plex Mono',monospace; }
+  .token-card .t-creator{ font-size:10px; color:var(--muted); font-family:'IBM Plex Mono',monospace; margin-top:1px; }
+  .token-card .t-stats{
+    display:grid; grid-template-columns:1fr 1fr; gap:6px 14px;
+  }
+  .token-card .t-stat .lbl{
+    font-family:'IBM Plex Mono',monospace; font-size:9.5px; letter-spacing:.04em;
+    color:var(--muted); text-transform:uppercase; margin-bottom:2px;
+  }
+  .token-card .t-stat .val{
+    font-family:'IBM Plex Mono',monospace; font-weight:600; font-size:13px; color:var(--ink);
+  }
+  .token-card .t-bar-wrap{ margin-top:2px; }
+  .token-card .t-bar-label{
+    display:flex; justify-content:space-between; margin-bottom:4px;
+    font-family:'IBM Plex Mono',monospace; font-size:10px; color:var(--muted);
+  }
+  .token-card .t-bar{
+    height:5px; background:var(--grid); border-radius:3px; overflow:hidden;
+  }
+  .token-card .t-bar .fill{ height:100%; border-radius:3px; transition:width .6s ease; }
+  .token-card .t-bar .fill.curving{ background:var(--cobalt); }
+  .token-card .t-bar .fill.done{ background:var(--sienna); }
+  .badge{
+    display:inline-flex; align-items:center; gap:5px;
+    padding:3px 8px; border-radius:3px;
+    font-family:'IBM Plex Mono',monospace; font-size:10px;
+    font-weight:600; letter-spacing:.03em; width:fit-content;
+  }
+  .badge::before{ content:''; width:5px; height:5px; border-radius:50%; flex-shrink:0; }
+  .badge-curve{ background:rgba(31,75,143,0.10); color:var(--cobalt); }
+  .badge-curve::before{ background:var(--cobalt); animation:pulse-live 2s ease-in-out infinite; }
+  .badge-grad{ background:rgba(162,74,34,0.08); color:var(--sienna); }
+  .badge-grad::before{ background:var(--sienna); }
+  .mono-val{ font-family:'IBM Plex Mono',monospace; font-weight:500; color:var(--ink); }
+  .up{ color:#1a7a3a; }
+  .down{ color:#b91c1c; }
+  .section-tabs-row{
+    display:flex; align-items:center; justify-content:space-between;
+    margin-bottom:24px; flex-wrap:wrap; gap:14px;
+  }
+  .section-tabs{
+    display:flex; gap:0; border:1px solid var(--grid-strong);
+    border-radius:3px; overflow:hidden; width:fit-content;
+  }
+  .section-tabs button{
+    padding:8px 16px; border:none; background:transparent;
+    font-family:'IBM Plex Mono',monospace; font-size:11.5px;
+    font-weight:600; letter-spacing:.04em; color:var(--ink-soft);
+    cursor:pointer; transition:all .15s;
+    border-right:1px solid var(--grid-strong);
+  }
+  .section-tabs button:last-child{ border-right:none; }
+  .section-tabs button.active{ background:var(--cobalt); color:var(--paper); }
+  .section-tabs button:hover:not(.active){ color:var(--cobalt); }
+  .token-count{
+    font-family:'IBM Plex Mono',monospace; font-size:12px;
+    color:var(--muted); display:flex; align-items:center; gap:8px;
+  }
+  .token-count strong{ color:var(--ink); }
+  .search-input{
+    padding:8px 14px; border:1px solid var(--grid-strong); border-radius:3px;
+    font-family:'IBM Plex Sans',sans-serif; font-size:13px;
+    background:rgba(255,255,255,0.5); color:var(--ink);
+    width:200px; transition:border-color .15s;
+  }
+  .search-input:focus{ outline:none; border-color:var(--cobalt); }
+  .search-input::placeholder{ color:var(--muted); }
+  @media(max-width:900px){ .search-input{ width:160px; } }
+  @media(max-width:600px){ .section-tabs-row{ flex-direction:column; align-items:flex-start; } }
+</style>
+</head>
+<body>
+
+<!-- Splash Screen -->
+<div id="splash-overlay">
+  <div class="s-mark">
+    <img src="assets/brand/luxy-logo.png" alt="Luxy" width="96" height="96" style="display:block">
+  </div>
+  <div class="s-wordmark">Luxy</div>
+  <div class="s-bar"></div>
+  <div class="s-status"><span class="s-dot"></span>Robinhood Chain · 4663</div>
+</div>
+
+<header>
+  <nav class="wrap">
+    <a class="logo" href="#top">
+      <span class="mark">
+        <img src="assets/brand/luxy-logo.png" alt="Luxy" width="26" height="26" style="display:block">
+      </span>
+      Luxy
+    </a>
+    <div class="navlinks">
+      <a href="#curve">Curve</a>
+      <a href="#process">Process</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#launches">Launches</a>
+      <a href="#trust">Trust</a>
+      <a href="docs.html">Docs</a>
+      <a href="#faq">FAQ</a>
+    </div>
+    <div class="navcta">
+      <a class="btn btn-ghost" href="#" onclick="return false;">+ Add RobinHood RPC</a>
+      <a class="btn btn-primary" href="#" onclick="openConnect(event); return false;">Connect</a>
+    </div>
+  </nav>
+</header>
+
+<!-- Ticker -->
+<div style="border-bottom:1px solid var(--grid-strong); background:rgba(var(--paper-rgb),0.6); backdrop-filter:blur(4px); overflow:hidden; position:sticky; top:72px; z-index:40;">
+  <div class="wrap" style="display:flex; align-items:center; height:36px; gap:28px; font-family:'IBM Plex Mono',monospace; font-size:11px; color:var(--muted); white-space:nowrap;">
+    <span style="font-weight:600; letter-spacing:.06em; text-transform:uppercase; color:var(--cobalt);">RHC 4663</span>
+    <span>◈ Curve live</span>
+    <span>◈ Bonding price: P(s) = P₀ + ΔP · s²</span>
+    <span>◈ Target: ≈3.96 ETH</span>
+    <span>◈ Max wallet: 5%</span>
+    <span>◈ Non-custodial</span>
+  </div>
+</div>
+
+<main id="top">
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-top">
+        <div class="chip"><span class="dot"></span> Robinhood Chain · 4663</div>
+        <div class="chip">Curve live</div>
+        <div class="chip">Fair-launch infrastructure</div>
+      </div>
+
+      <div class="hero-grid">
+        <div>
+          <div class="eyebrow">Sheet 00 · Overview</div>
+          <h1>Markets born <em>on Robinhood&nbsp;Chain.</em></h1>
+          <p class="lede">Deploy a token in one signature. A deterministic bonding curve sets every price from on-chain state — no order book, no market maker, no private round. When the curve fills, the market graduates into public liquidity on its own.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#process">Launch a token →</a>
+            <a class="btn btn-ghost" href="#curve">Read the curve</a>
+          </div>
+          <div class="hero-fine">ROBINHOOD CHAIN · 4663 · NON-CUSTODIAL EXECUTION · CONTRACT-ENFORCED LIMITS</div>
+        </div>
+
+        <div class="diagram">
+          <div class="diagram-label">
+            <span>FIG. 01 — RESERVE VS. QUOTE</span>
+            <span>DRAWING NOT TO SCALE</span>
+          </div>
+          <svg viewBox="0 0 460 260" xmlns="http://www.w3.org/2000/svg">
+            <!-- axes -->
+            <line x1="40" y1="20" x2="40" y2="220" stroke="#B9B097" stroke-width="1"/>
+            <line x1="40" y1="220" x2="440" y2="220" stroke="#B9B097" stroke-width="1"/>
+            <!-- curve fill -->
+            <path class="curve-fill" d="M40,220 C 140,215 260,190 340,120 C 380,85 410,55 430,30 L430,220 Z"/>
+            <!-- curve line -->
+            <path class="curve-path" d="M40,220 C 140,215 260,190 340,120 C 380,85 410,55 430,30"/>
+            <!-- graduation marker -->
+            <line x1="340" y1="30" x2="340" y2="220" stroke="#B9B097" stroke-width="1" stroke-dasharray="2 4"/>
+            <circle cx="340" cy="120" r="3.5" class="leader-dot"/>
+            <line class="leader" x1="340" y1="120" x2="392" y2="96"/>
+            <text class="leader-text strong" x="396" y="94">Graduation</text>
+            <text class="leader-text" x="396" y="108">≈3.96 ETH reserve</text>
+
+            <circle cx="120" cy="216" r="3.5" class="leader-dot"/>
+            <line class="leader" x1="120" y1="216" x2="90" y2="240"/>
+            <text class="leader-text" x="46" y="252">Launch, s → 0</text>
+
+            <text class="leader-text" x="356" y="26">Uniswap V3</text>
+            <text class="leader-text" x="356" y="38">market opens</text>
+
+            <text class="leader-text" x="10" y="18" transform="rotate(0)">price</text>
+            <text class="leader-text" x="410" y="236">supply</text>
+          </svg>
+
+          <div class="diagram-params">
+            <div class="param"><div class="val">1 tok</div><div class="lbl">Minimum buy</div></div>
+            <div class="param"><div class="val">5%</div><div class="lbl">Max per tx</div></div>
+            <div class="param"><div class="val">5%</div><div class="lbl">Max wallet</div></div>
+            <div class="param"><div class="val">3.96 Ξ</div><div class="lbl">Target reserve</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <hr class="divider wrap">
+
+  <!-- PROCESS -->
+  <section id="process">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Sheet 01–04 · Lifecycle</div>
+        <h2>One state machine, start to finish.</h2>
+        <p>Every market moves through the same four states in order. Nothing skips ahead through a private round, and nothing needs a manual handoff between steps.</p>
+      </div>
+
+      <div class="sheets">
+        <div class="sheet reveal">
+          <div class="num">01 / DEPLOY</div>
+          <h3>Deploy</h3>
+          <p>Name it, describe it, sign once. The launchpad writes the token and its pricing contract in the same transaction — no code to write, nothing held back for the team.</p>
+          <div class="sheet-spec">
+            <div><span>Network</span><span>Robinhood Chain</span></div>
+            <div><span>Required</span><span>Name, ticker</span></div>
+            <div><span>Optional</span><span>Image, links</span></div>
+          </div>
+        </div>
+        <div class="sheet reveal">
+          <div class="num">02 / DISCOVER</div>
+          <h3>Discover</h3>
+          <p>A bonding curve prices every trade from on-chain reserves. Buys push the quote up along the curve; sells return tokens and walk it back down the same path.</p>
+          <div class="sheet-spec">
+            <div><span>Min buy</span><span>1 token</span></div>
+            <div><span>Max / tx</span><span>5% of target</span></div>
+            <div><span>Sizing</span><span>Token or ETH</span></div>
+          </div>
+        </div>
+        <div class="sheet reveal">
+          <div class="num">03 / GRADUATE</div>
+          <h3>Graduate</h3>
+          <p>Once reserves hit target, the curve stops quoting. What's left of supply and ETH gets paired and dropped straight into a public pool — never returned, never burned.</p>
+          <div class="sheet-spec">
+            <div><span>Target</span><span>≈3.96 ETH</span></div>
+            <div><span>Destination</span><span>Public AMM</span></div>
+            <div><span>LP position</span><span>Locked</span></div>
+          </div>
+        </div>
+        <div class="sheet reveal">
+          <div class="num">04 / EARN</div>
+          <h3>Earn</h3>
+          <p>Graduated LP positions can stake into a reward vault for a pro-rata cut of streamed yield. No lock-up on the stake — claiming is a separate, on-demand action.</p>
+          <div class="sheet-spec">
+            <div><span>Reward asset</span><span>WETH</span></div>
+            <div><span>Lock period</span><span>None</span></div>
+            <div><span>Claims</span><span>Manual</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CURVE / FORMULA -->
+  <section id="curve">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Sheet 05 · Mechanism</div>
+        <h2>Demand writes the curve.</h2>
+        <p>Price is a function of on-chain state, not a book of resting orders. There's no operator setting a reference price, and no off-chain matching step between your signature and your fill.</p>
+      </div>
+
+      <div class="formula-block reveal">
+        <div>
+          <div class="formula-big">P(s) = P₀ + ΔP · s²</div>
+          <p>Every quote — on the swap screen and inside a token's own trade panel — is read from this same function. It's the exact calculation your transaction will execute, not a separate estimate layered on top.</p>
+          <div class="formula-legend">
+            P(s) — price at tokens sold<br>
+            P₀ — starting price (MCap $3K)<br>
+            ΔP — curve steepness<br>
+            Total supply — 1,000,000,000 fixed
+          </div>
+        </div>
+        <svg viewBox="0 0 420 220" xmlns="http://www.w3.org/2000/svg">
+          <line x1="30" y1="10" x2="30" y2="190" stroke="#B9B097" stroke-width="1"/>
+          <line x1="30" y1="190" x2="400" y2="190" stroke="#B9B097" stroke-width="1"/>
+          <path d="M30,190 C 120,188 220,165 300,110 C 340,82 370,50 395,20" fill="none" stroke="#1F4B8F" stroke-width="2"/>
+          <text class="leader-text" x="34" y="24">price</text>
+          <text class="leader-text" x="360" y="205">supply</text>
+          <text class="leader-text strong" x="290" y="100">convex —</text>
+          <text class="leader-text strong" x="290" y="112">steepens near target</text>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <!-- CAPABILITIES -->
+  <section id="capabilities">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Sheet 06 · Protocol surface</div>
+        <h2>Built for launches that become markets.</h2>
+        <p>The curve is the core, not the whole product. Trading controls, distribution limits, referral accounting, and an assistant that knows the protocol ship alongside it.</p>
+      </div>
+
+      <div class="cap-grid">
+        <div class="cap reveal">
+          <div class="idx">01</div>
+          <h3>Quotes from the contract</h3>
+          <p>The swap screen and every token's trade panel read the live on-chain quote — the same math that executes your trade.</p>
+          <ul>
+            <li>0.5% · 1% · 3% presets</li>
+            <li>Minimum-received enforced on-chain</li>
+            <li>A reverted trade costs nothing</li>
+          </ul>
+        </div>
+        <div class="cap reveal">
+          <div class="idx">02</div>
+          <h3>No wallet corners a launch</h3>
+          <p>Every token caps a wallet at 5% of supply, checked on every transfer at the contract level — not just in the interface.</p>
+          <ul>
+            <li>Curve and pool addresses exempt</li>
+            <li>Enforced on transfer</li>
+            <li>Raises the cost of sniping</li>
+          </ul>
+        </div>
+        <div class="cap reveal">
+          <div class="idx">03</div>
+          <h3>Referrals paid from fee volume</h3>
+          <p>Register a code once, share it, and earn a slice of protocol fees from wallets that trade under it. Share grows in tiers with volume.</p>
+          <ul>
+            <li>One code per referrer</li>
+            <li>Permanent once set</li>
+            <li>Withdraw any time</li>
+          </ul>
+        </div>
+        <div class="cap reveal">
+          <div class="idx">04</div>
+          <h3>Open or gated launches</h3>
+          <p>Governance sets the mode. In gated mode, an admin clears a wallet to deploy — they never deploy on your behalf, and you stay the on-chain creator.</p>
+          <ul>
+            <li>Permission gate, not a content edit</li>
+            <li>Metadata is never rewritten</li>
+            <li>Deployment fee shown up front</li>
+          </ul>
+        </div>
+        <div class="cap reveal">
+          <div class="idx">05</div>
+          <h3>Built to be read by machines</h3>
+          <p>Resolve addresses from the deployment registry, read decimals off the token, simulate before you submit, and index canonical events.</p>
+          <ul>
+            <li>Never assume 18 decimals</li>
+            <li>Simulate to surface reverts early</li>
+            <li>An event for every state change</li>
+          </ul>
+        </div>
+        <div class="cap reveal">
+          <div class="idx">06</div>
+          <h3>An assistant that knows the protocol</h3>
+          <p>Ask protocol-specific questions and choose your depth — from a one-line answer to a full walk-through of the mechanism.</p>
+          <ul>
+            <li>Adjustable answer depth</li>
+            <li>Scoped to this protocol only</li>
+            <li>Linked from the main nav</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TRUST -->
+  <section id="trust">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Sheet 07 · Boundary</div>
+        <h2>Know what code guarantees. Know what governance controls.</h2>
+        <p>Non-custodial execution isn't the same as governance-free. The line between the two should be visible before anyone signs anything.</p>
+      </div>
+
+      <div class="trust-grid reveal">
+        <div class="trust-col contract">
+          <div class="trust-tag">Enforced on-chain</div>
+          <h3>Contract guarantee</h3>
+          <div class="trust-item">
+            <h4>Trade pricing & execution</h4>
+            <p>Priced by the curve contract and settled atomically — no off-chain matching step that could substitute a worse fill.</p>
+          </div>
+          <div class="trust-item">
+            <h4>Slippage protection</h4>
+            <p>Your signed minimum-received value is checked on-chain. A worse fill reverts instead of executing.</p>
+          </div>
+          <div class="trust-item">
+            <h4>Max wallet limit</h4>
+            <p>The 5% cap is checked on every transfer at the token contract level, not only in the interface.</p>
+          </div>
+          <div class="trust-item">
+            <h4>Pre-graduation pool protection</h4>
+            <p>The destination pool exists before the token address is public and stays locked until the curve completes.</p>
+          </div>
+        </div>
+        <div class="trust-col gov">
+          <div class="trust-tag">Governance authority</div>
+          <h3>Administrative scope</h3>
+          <div class="trust-item">
+            <h4>Launch access can be paused</h4>
+            <p>Governance can pause new deployments or gate them behind approval. Live tokens aren't affected.</p>
+          </div>
+          <div class="trust-item">
+            <h4>Wallets can be blocked from trading</h4>
+            <p>The access-control layer can restrict specific addresses — a platform tool, not a creator control.</p>
+          </div>
+          <div class="trust-item">
+            <h4>Fee parameters for new launches</h4>
+            <p>Governance sets buy/sell fee caps for newly created tokens, within hard limits fixed in the contract code.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Sheet 08 · Before you sign</div>
+        <h2>Questions that protect capital.</h2>
+        <p>Quotes move, limits are contractual, and graduation changes the venue you're trading on. Worth knowing before your first transaction.</p>
+      </div>
+
+      <div class="faq-list">
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="num">01</span>
+            <h3>Why didn't my quote exactly match my fill?</h3>
+            <span class="plus">+</span>
+          </div>
+          <div class="faq-a"><p>The quote reflects curve state at the moment you asked for it. Any trade that lands before yours moves the price slightly — that's what your slippage tolerance is there to bound.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="num">02</span>
+            <h3>Why can't I buy more of a token?</h3>
+            <span class="plus">+</span>
+          </div>
+          <div class="faq-a"><p>You've likely hit the per-transaction cap or the max-wallet limit. Split large buys across multiple transactions, spaced so the curve can move between them.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="num">03</span>
+            <h3>Why is trading disabled on a token I created?</h3>
+            <span class="plus">+</span>
+          </div>
+          <div class="faq-a"><p>Check whether it's graduated to its own pool — trading continues there. If it hasn't, and still won't trade, the access-control layer may be paused platform-wide.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="num">04</span>
+            <h3>What happens to unsold curve tokens at graduation?</h3>
+            <span class="plus">+</span>
+          </div>
+          <div class="faq-a"><p>Remaining supply and collected ETH are paired and deposited as opening liquidity in the new pool. Nothing is returned to the creator or burned.</p></div>
+        </div>
+        <div class="faq-item">
+          <div class="faq-q" onclick="toggleFaq(this)">
+            <span class="num">05</span>
+            <h3>Does staking pay a fixed rate?</h3>
+            <span class="plus">+</span>
+          </div>
+          <div class="faq-a"><p>No. Displayed APR is a snapshot that moves with emissions, LP price, and participation. Treat it as an estimate, not a guarantee.</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- LAUNCHES -->
+  <section id="launches">
+    <div class="wrap">
+      <div class="section-head">
+        <div class="eyebrow">Sheet 09 · Live tokens</div>
+        <h2>Tokens deployed on Luxy.</h2>
+        <p>Every token here was deployed permissionlessly through the launchpad. Click any row to see its full curve, trade history, and graduation progress.</p>
+      </div>
+
+      <div class="section-tabs-row">
+        <div style="display:flex;align-items:center;gap:14px;flex-wrap:wrap;">
+          <div class="section-tabs">
+            <button class="active" onclick="filterLaunches('all',this)">All</button>
+            <button onclick="filterLaunches('curve',this)">Curving</button>
+            <button onclick="filterLaunches('grad',this)">Graduated</button>
+          </div>
+          <span class="token-count"><strong id="token-visible-count">1</strong> token</span>
+        </div>
+        <input type="text" class="search-input" id="token-search" placeholder="Search tokens…" oninput="searchTokens()" autocomplete="off">
+      </div>
+
+      <div class="token-grid reveal" id="token-tbody">
+        <!-- Test -->
+        <div class="token-card" data-status="curve" data-search="test test" onclick="openTokenDetail('Test','TEST','curve','0.32','3.96','2h','0x7E5F3a2C1d8B9e4A6f0D3c7E2b5A9f1C4d8B6e3A')">
+          <div class="t-top">
+            <div class="t-avatar"><img src="assets/tokens/test-logo.svg" alt="Test" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'"><div class="avatar-fallback" style="display:none">T</div><span class="live-dot"></span></div>
+            <div><div class="t-name">Test</div><div class="t-ticker">TEST</div><div class="t-creator">0x7E5F…e3A7</div></div>
+            <span class="badge badge-curve" style="margin-left:auto;">Curving</span>
+          </div>
+          <div class="t-stats">
+            <div class="t-stat"><div class="lbl">Price</div><div class="val">0.000003 ETH</div></div>
+            <div class="t-stat"><div class="lbl">MCap</div><div class="val">$3.0K</div></div>
+            <div class="t-stat"><div class="lbl">Volume</div><div class="val">$2.1K</div></div>
+            <div class="t-stat"><div class="lbl">Txns</div><div class="val">47</div></div>
+          </div>
+          <div class="t-bar-wrap">
+            <div class="t-bar-label"><span>Curve progress</span><span>8%</span></div>
+            <div class="t-bar"><div class="fill curving" style="width:8%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section>
+    <div class="wrap">
+      <div class="final-cta reveal">
+        <div class="eyebrow" style="justify-content:center;">Sheet 10 · Start</div>
+        <h2>One signature. One curve. One market.</h2>
+        <p>Launch on Robinhood Chain, let demand write the price, and graduate with liquidity already in place — no middlemen, no presale, no special access.</p>
+        <div class="final-actions">
+          <a class="btn btn-primary" href="#" onclick="return false;">Create token</a>
+          <a class="btn btn-ghost" href="#launches">Browse launches</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- Create Token Modal -->
+<div id="modal-overlay" onclick="if(event.target===this)closeModal()">
+  <div id="modal-dialog" onclick="event.stopPropagation()">
+    <h2>Deploy Token</h2>
+    <p class="sub">One signature. No code. Live on Robinhood Chain.</p>
+    <div class="field">
+      <label>Token Logo</label>
+      <div class="logo-upload">
+        <div class="logo-preview" id="logo-preview">
+          <img id="logo-preview-img" alt="Logo preview">
+          <div class="logo-placeholder">+<br>Logo</div>
+        </div>
+        <div>
+          <label class="logo-upload-btn" for="token-logo">Choose image</label>
+          <input type="file" id="token-logo" accept="image/png,image/jpeg,image/svg+xml,image/webp" onchange="previewLogo(event)">
+          <div class="logo-hint">PNG, JPG, SVG, or WebP</div>
+        </div>
+      </div>
+    </div>
+    <div class="field">
+      <label>Token Name</label>
+      <input type="text" id="token-name" placeholder="e.g. My Token" autocomplete="off">
+    </div>
+    <div class="field">
+      <label>Ticker</label>
+      <input type="text" id="token-ticker" placeholder="e.g. MTK" maxlength="8" autocomplete="off" style="text-transform:uppercase">
+    </div>
+    <div class="field">
+      <label>Description <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+      <textarea id="token-desc" placeholder="What is this token about?"></textarea>
+    </div>
+    <div class="field">
+      <label>Social Links <span style="color:var(--muted);font-weight:400">(optional)</span></label>
+      <div style="display:flex;flex-direction:column;gap:8px;">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" fill="#1B2233"/></svg>
+          <input type="url" id="token-twitter" placeholder="https://x.com/yourtoken" autocomplete="off" style="flex:1;padding:9px 12px;border:1px solid var(--grid-strong);border-radius:3px;font-size:13px;background:rgba(255,255,255,0.6);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.15 1.58-.8 5.42-1.13 7.19-.14.75-.42 1-.68 1.03-.58.05-1.02-.38-1.58-.75-.88-.58-1.38-.94-2.23-1.5-.99-.65-.35-1.01.22-1.59.15-.15 2.71-2.48 2.76-2.69.01-.03.01-.14-.07-.2-.08-.06-.19-.04-.27-.02-.12.02-1.96 1.25-5.54 3.66-.52.36-1 .53-1.42.52-.47-.01-1.37-.26-2.03-.48-.82-.27-1.47-.42-1.41-.88.03-.24.37-.49 1.02-.74 3.98-1.73 6.64-2.87 7.98-3.42 3.8-1.58 4.6-1.85 5.11-1.86.11 0 .37.03.54.17.14.12.18.28.2.45-.01.06.01.24 0 .38z" fill="#1B2233"/></svg>
+          <input type="url" id="token-telegram" placeholder="https://t.me/yourtoken" autocomplete="off" style="flex:1;padding:9px 12px;border:1px solid var(--grid-strong);border-radius:3px;font-size:13px;background:rgba(255,255,255,0.6);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;">
+        </div>
+        <div style="display:flex;align-items:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" style="flex-shrink:0;"><circle cx="12" cy="12" r="10" stroke="#1B2233" stroke-width="2"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z" stroke="#1B2233" stroke-width="2"/></svg>
+          <input type="url" id="token-website" placeholder="https://yourtoken.io" autocomplete="off" style="flex:1;padding:9px 12px;border:1px solid var(--grid-strong);border-radius:3px;font-size:13px;background:rgba(255,255,255,0.6);color:var(--ink);font-family:'IBM Plex Sans',sans-serif;">
+        </div>
+      </div>
+    </div>
+    <div class="dev-buy-row">
+      <div class="field">
+        <label>Dev Buy <span style="color:var(--muted);font-weight:400">(ETH)</span></label>
+        <input type="number" id="token-devbuy" placeholder="0.05" step="0.001" min="0" autocomplete="off">
+      </div>
+      <div class="field">
+        <label>Total Supply</label>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:14px;font-weight:600;color:var(--ink);padding:10px 0;">1,000,000,000</div>
+      </div>
+    </div>
+    <div class="field" style="display:flex;gap:10px;align-items:center;font-size:13px;color:var(--ink-soft);">
+      <span>Network:</span><span style="font-family:'IBM Plex Mono',monospace;font-weight:600;color:var(--cobalt);">Robinhood Chain · 4663</span>
+      <span style="margin-left:auto;font-family:'IBM Plex Mono',monospace;font-size:11px;">Fee: 0.001 ETH</span>
+    </div>
+    <div class="actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-submit" onclick="submitToken()">Deploy →</button>
+    </div>
+  </div>
+</div>
+
+<!-- Toast -->
+<div id="modal-toast"></div>
+
+<!-- Connect Wallet Modal -->
+<div id="wallet-overlay" onclick="if(event.target===this)closeWallet()">
+  <div id="wallet-dialog" onclick="event.stopPropagation()">
+    <h2>Connect Wallet</h2>
+    <p class="sub">Select a wallet to use Luxy on Robinhood Chain.</p>
+    <button class="wallet-option" onclick="connectWallet('MetaMask')">
+      <span class="w-icon" style="background:#FFF3E0;">🦊</span>
+      <span>
+        <div class="w-name">MetaMask</div>
+        <div class="w-tag">Browser extension</div>
+      </span>
+    </button>
+    <button class="wallet-option" onclick="connectWallet('Rabby')">
+      <span class="w-icon" style="background:#ECF2FF;">🐰</span>
+      <span>
+        <div class="w-name">Rabby</div>
+        <div class="w-tag">Browser extension</div>
+      </span>
+    </button>
+    <button class="wallet-option" onclick="connectWallet('WalletConnect')">
+      <span class="w-icon" style="background:#E8F5FF;">🔗</span>
+      <span>
+        <div class="w-name">WalletConnect</div>
+        <div class="w-tag">Mobile · QR code</div>
+      </span>
+    </button>
+    <button class="wallet-option" onclick="connectWallet('Coinbase')">
+      <span class="w-icon" style="background:#E8EFFF;">🏦</span>
+      <span>
+        <div class="w-name">Coinbase Wallet</div>
+        <div class="w-tag">Browser extension · Mobile</div>
+      </span>
+    </button>
+  </div>
+</div>
+
+<!-- Token Detail Panel -->
+<div id="detail-overlay" onclick="if(event.target===this)closeDetail()">
+  <div id="detail-panel" onclick="event.stopPropagation()">
+    <div class="detail-header">
+      <div class="detail-header-left">
+        <div class="detail-avatar" id="d-avatar">T</div>
+        <div>
+          <h3 id="d-name">Test</h3>
+          <div class="ticker" id="d-ticker">TEST</div>
+          <div class="addr" id="d-addr">0x7E5F…e3A7</div>
+          <div style="display:flex;gap:10px;margin-top:6px;">
+            <a id="d-explorer" href="#" target="_blank" class="d-link-btn d-link-explorer">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="2"/><path d="M7 17L17 7M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Explorer
+            </a>
+            <a id="d-analytics" href="#" target="_blank" class="d-link-btn d-link-analytics">
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 3v18h18M7 16l4-6 3 4 4-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Analytics
+            </a>
+          </div>
+        </div>
+      </div>
+      <button class="detail-close" onclick="closeDetail()">✕</button>
+    </div>
+    <div class="detail-body">
+      <!-- Stats -->
+      <div class="detail-stats">
+        <div class="detail-stat"><div class="lbl">Price</div><div class="val" id="d-price">0.000003 ETH</div></div>
+        <div class="detail-stat"><div class="lbl">Market Cap</div><div class="val" id="d-mcap">$3.0K</div></div>
+        <div class="detail-stat"><div class="lbl">Reserve</div><div class="val" id="d-reserve">0 / 3.96 ETH</div></div>
+        <div class="detail-stat"><div class="lbl">Holders</div><div class="val">—</div></div>
+        <div class="detail-stat"><div class="lbl">Volume 24h</div><div class="val">—</div></div>
+      </div>
+
+      <!-- Progress to graduation -->
+      <div class="detail-grad-wrap">
+        <div class="detail-grad-header">
+          <span class="mono" style="font-size:11px;color:var(--muted);">Graduation progress</span>
+          <span class="mono" id="d-curve-pos" style="font-size:12px;font-weight:600;color:var(--cobalt);">0%</span>
+        </div>
+        <div class="detail-grad-bar">
+          <div class="detail-grad-fill curving" id="d-grad-fill" style="width:0%"></div>
+        </div>
+        <div class="detail-grad-footer">
+          <span class="mono" style="font-size:10px;color:var(--muted);">0 ETH</span>
+          <span class="mono" style="font-size:10px;color:var(--sienna);font-weight:600;">Target: 3.96 ETH</span>
+        </div>
+      </div>
+
+      <!-- Chart + Trade two-column -->
+      <div class="detail-two-col">
+        <div class="detail-chart">
+          <div class="detail-chart-label">
+            <span>BONDING CURVE</span>
+            <span class="mono" style="font-size:10px;color:var(--muted);">P(s) = P₀ + ΔP · s²</span>
+          </div>
+          <svg viewBox="0 0 500 180" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <linearGradient id="curveGrad2" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#1F4B8F" stop-opacity="0.10"/>
+                <stop offset="100%" stop-color="#1F4B8F" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <line x1="35" y1="150" x2="470" y2="150" stroke="#CFC8B2" stroke-width="1"/>
+            <line x1="35" y1="15" x2="35" y2="150" stroke="#CFC8B2" stroke-width="1"/>
+            <path d="M35,150 C 140,148 250,135 340,95 C 400,65 445,40 470,20" fill="url(#curveGrad2)" stroke="#1F4B8F" stroke-width="2.5"/>
+            <line x1="440" y1="20" x2="440" y2="150" stroke="#B9B097" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="445" y="32" font-family="IBM Plex Mono,monospace" font-size="8" fill="#767C8C">Graduation</text>
+            <circle id="d-curve-dot" cx="35" cy="150" r="5" fill="#A24A22"/>
+            <text x="420" y="165" font-family="IBM Plex Mono,monospace" font-size="8" fill="#767C8C">supply →</text>
+            <text x="8" y="25" font-family="IBM Plex Mono,monospace" font-size="8" fill="#767C8C">↑ price</text>
+          </svg>
+        </div>
+        <div class="detail-trade-col">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;letter-spacing:.04em;color:var(--muted);margin-bottom:10px;">TRADE</div>
+          <input type="number" id="trade-amount" placeholder="0.01 ETH" step="0.001" min="0" class="d-trade-input">
+          <div style="display:flex;gap:6px;margin:8px 0 14px;">
+            <button class="d-pct-btn" onclick="setTradeAmt('0.01')">0.01</button>
+            <button class="d-pct-btn" onclick="setTradeAmt('0.05')">0.05</button>
+            <button class="d-pct-btn" onclick="setTradeAmt('0.1')">0.1</button>
+            <button class="d-pct-btn" onclick="setTradeAmt('0.5')">0.5</button>
+          </div>
+          <div style="display:flex;gap:8px;">
+            <button class="btn-buy" onclick="doTrade('buy')" style="flex:1;">Buy</button>
+            <button class="btn-sell" onclick="doTrade('sell')" style="flex:1;">Sell</button>
+          </div>
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10px;color:var(--muted);margin-top:12px;text-align:center;">
+            Max tx: 5% · Max wallet: 5% · Fee: 0.5%
+          </div>
+        </div>
+      </div>
+
+      <!-- Tabs -->
+      <div class="detail-tabs">
+        <button class="active" onclick="switchDetailTab('holders',this)">Holders (10)</button>
+        <button onclick="switchDetailTab('trades',this)">Recent Trades</button>
+      </div>
+
+      <!-- Holders -->
+      <div id="detail-holders">
+        <table class="holder-table">
+          <thead><tr><th class="rank">#</th><th>Address</th><th>Amount</th><th>%</th><th>Value</th></tr></thead>
+          <tbody>
+            <tr><td class="rank">1</td><td class="mono" style="font-size:11px;">0x7E5F…e3A7</td><td class="mono">450,000,000</td><td><div class="hold-pct-bar"><div class="hold-pct-fill" style="width:45%"></div></div><span class="mono" style="font-size:11px;">45%</span></td><td class="mono">$1,350</td></tr>
+            <tr><td class="rank">2</td><td class="mono" style="font-size:11px;">0x3aB7…2F1c</td><td class="mono">250,000,000</td><td><div class="hold-pct-bar"><div class="hold-pct-fill" style="width:25%"></div></div><span class="mono" style="font-size:11px;">25%</span></td><td class="mono">$750</td></tr>
+            <tr><td class="rank">3</td><td class="mono" style="font-size:11px;">0x9C2d…A4e8</td><td class="mono">120,000,000</td><td><div class="hold-pct-bar"><div class="hold-pct-fill" style="width:12%"></div></div><span class="mono" style="font-size:11px;">12%</span></td><td class="mono">$360</td></tr>
+            <tr><td class="rank">4</td><td class="mono" style="font-size:11px;">0xF1a0…7Bb3</td><td class="mono">80,000,000</td><td><div class="hold-pct-bar"><div class="hold-pct-fill" style="width:8%"></div></div><span class="mono" style="font-size:11px;">8%</span></td><td class="mono">$240</td></tr>
+            <tr><td class="rank">5</td><td class="mono" style="font-size:11px;">0xB5e8…3Dc9</td><td class="mono">50,000,000</td><td><div class="hold-pct-bar"><div class="hold-pct-fill" style="width:5%"></div></div><span class="mono" style="font-size:11px;">5%</span></td><td class="mono">$150</td></tr>
+            <tr><td class="rank" style="color:var(--muted);">6–10</td><td class="mono" style="font-size:11px;color:var(--muted);">5 wallets</td><td class="mono" style="color:var(--muted);">50,000,000</td><td><div class="hold-pct-bar"><div class="hold-pct-fill" style="width:5%"></div></div><span class="mono" style="font-size:11px;">5%</span></td><td class="mono" style="color:var(--muted);">$150</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Trades -->
+      <div id="detail-trades" style="display:none;">
+        <table class="trade-table">
+          <thead><tr><th>Type</th><th>TEST</th><th>ETH</th><th>Price</th><th>Address</th><th>Time</th></tr></thead>
+          <tbody>
+            <tr><td class="type-buy">Buy</td><td class="mono">12,500</td><td class="mono">0.00004</td><td class="mono">0.0000032</td><td class="mono" style="font-size:11px;">0x3aB7…2F1c</td><td class="mono" style="font-size:10px;color:var(--muted);">2m ago</td></tr>
+            <tr><td class="type-buy">Buy</td><td class="mono">45,000</td><td class="mono">0.00014</td><td class="mono">0.0000031</td><td class="mono" style="font-size:11px;">0x9C2d…A4e8</td><td class="mono" style="font-size:10px;color:var(--muted);">8m ago</td></tr>
+            <tr><td class="type-sell">Sell</td><td class="mono">8,200</td><td class="mono">0.00002</td><td class="mono">0.0000029</td><td class="mono" style="font-size:11px;">0x7E5F…e3A7</td><td class="mono" style="font-size:10px;color:var(--muted);">15m ago</td></tr>
+            <tr><td class="type-buy">Buy</td><td class="mono">100,000</td><td class="mono">0.00031</td><td class="mono">0.0000031</td><td class="mono" style="font-size:11px;">0xF1a0…7Bb3</td><td class="mono" style="font-size:10px;color:var(--muted);">22m ago</td></tr>
+            <tr><td class="type-buy">Buy</td><td class="mono">30,000</td><td class="mono">0.00009</td><td class="mono">0.0000030</td><td class="mono" style="font-size:11px;">0xB5e8…3Dc9</td><td class="mono" style="font-size:10px;color:var(--muted);">31m ago</td></tr>
+            <tr><td class="type-sell">Sell</td><td class="mono">15,000</td><td class="mono">0.00005</td><td class="mono">0.0000033</td><td class="mono" style="font-size:11px;">0x9C2d…A4e8</td><td class="mono" style="font-size:10px;color:var(--muted);">45m ago</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div class="wrap">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a class="logo" href="#top">
+          <span class="mark">
+            <svg viewBox="0 0 26 26" fill="none">
+              <rect x="0.5" y="0.5" width="25" height="25" rx="3" stroke="#1B2233" stroke-width="1"/>
+              <path d="M4 19 C 9 19, 9 7, 14 7 C 19 7, 19 19, 22 19" stroke="#1F4B8F" stroke-width="2" fill="none" stroke-linecap="round"/>
+            </svg>
+          </span>
+          Luxy
+        </a>
+        <p>A bonding-curve launchpad. Fair launches, on-chain quotes, automated graduation into a public market.</p>
+      </div>
+      <div class="footer-docs">
+        <h4>Documentation · 9 guides</h4>
+        <div class="docs-list">
+          <a href="#" onclick="return false;">Intro</a>
+          <a href="#" onclick="return false;">Curve</a>
+          <a href="#" onclick="return false;">Launchpad</a>
+          <a href="#" onclick="return false;">Limits</a>
+          <a href="#" onclick="return false;">Graduation</a>
+          <a href="#" onclick="return false;">Referrals</a>
+          <a href="#" onclick="return false;">Staking</a>
+          <a href="#" onclick="return false;">Security</a>
+          <a href="#" onclick="return false;">FAQ</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>LUXY · ROBINHOOD CHAIN · SHEET REV. 2026-07</span>
+      <span>NON-CUSTODIAL · CONTRACT-ENFORCED · NOT FINANCIAL ADVICE</span>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Splash dismiss
+  (function(){
+    var splash = document.getElementById('splash-overlay');
+    window.addEventListener('load', function(){
+      setTimeout(function(){
+        splash.classList.add('hidden');
+        document.body.style.overflow = '';
+      }, 1800);
+    });
+  })();
+
+  // Modal
+  function openModal(){
+    document.getElementById('modal-overlay').classList.add('open');
+  }
+  function closeModal(){
+    document.getElementById('modal-overlay').classList.remove('open');
+    resetModal();
+  }
+  function resetModal(){
+    document.getElementById('token-name').value = '';
+    document.getElementById('token-ticker').value = '';
+    document.getElementById('token-desc').value = '';
+    document.getElementById('token-twitter').value = '';
+    document.getElementById('token-telegram').value = '';
+    document.getElementById('token-website').value = '';
+    document.getElementById('token-devbuy').value = '';
+    document.getElementById('token-logo').value = '';
+    document.getElementById('logo-preview-img').src = '';
+    document.getElementById('logo-preview').classList.remove('has-image');
+  }
+  function previewLogo(e){
+    var file = e.target.files[0];
+    if(!file) return;
+    var reader = new FileReader();
+    reader.onload = function(ev){
+      document.getElementById('logo-preview-img').src = ev.target.result;
+      document.getElementById('logo-preview').classList.add('has-image');
+    };
+    reader.readAsDataURL(file);
+  }
+  function submitToken(){
+    var name = document.getElementById('token-name').value.trim();
+    var ticker = document.getElementById('token-ticker').value.trim();
+    var devbuy = document.getElementById('token-devbuy').value.trim();
+    var logo = document.getElementById('token-logo').files[0];
+    if(!name || !ticker){
+      showToast('Please fill in token name and ticker.');
+      return;
+    }
+    closeModal();
+    var parts = ['Token "' + name + '" (' + ticker.toUpperCase() + ') deployed · Supply: 1B'];
+    if(devbuy) parts.push('Dev buy: ' + devbuy + ' ETH');
+    if(logo) parts.push('Logo: ' + logo.name);
+    var tw = document.getElementById('token-twitter').value.trim();
+    var tg = document.getElementById('token-telegram').value.trim();
+    var web = document.getElementById('token-website').value.trim();
+    if(tw || tg || web) parts.push('Links: ' + [tw,tg,web].filter(Boolean).length + ' added');
+    showToast(parts.join(' · ') + ' — TX: 0x' + Math.random().toString(16).slice(2,12) + '...');
+  }
+  function showToast(msg){
+    var t = document.getElementById('modal-toast');
+    t.textContent = msg;
+    t.classList.add('show');
+    clearTimeout(t._timeout);
+    t._timeout = setTimeout(function(){ t.classList.remove('show'); }, 3500);
+  }
+
+  // Wire all "Create token" / "Launch a token" buttons
+  document.querySelectorAll('a.btn-primary').forEach(function(btn){
+    if(btn.textContent.toLowerCase().indexOf('token') !== -1 || btn.textContent.toLowerCase().indexOf('launch') !== -1){
+      btn.addEventListener('click', function(e){ e.preventDefault(); openModal(); });
+    }
+  });
+
+  // Connect Wallet
+  function openConnect(e){ e.preventDefault(); document.getElementById('wallet-overlay').classList.add('open'); }
+  function closeWallet(){ document.getElementById('wallet-overlay').classList.remove('open'); }
+  function connectWallet(name){
+    closeWallet();
+    var btn = document.querySelector('.navcta .btn-primary');
+    var addr = '0x' + Math.random().toString(16).slice(2, 42);
+    btn.textContent = addr.slice(0,6) + '...' + addr.slice(-4);
+    btn.style.fontFamily = 'IBM Plex Mono, monospace';
+    btn.style.fontSize = '13px';
+    showToast('Connected to ' + name + ' · Robinhood Chain 4663');
+  }
+
+  function toggleFaq(el){
+    var item = el.parentElement;
+    var wasOpen = item.classList.contains('open');
+    document.querySelectorAll('.faq-item.open').forEach(function(i){ i.classList.remove('open'); });
+    if(!wasOpen){ item.classList.add('open'); }
+  }
+
+  function filterLaunches(status,btn){
+    document.querySelectorAll('.section-tabs button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    var visible = 0;
+    var searchVal = (document.getElementById('token-search').value || '').toLowerCase();
+    document.querySelectorAll('#token-tbody .token-card').forEach(function(row){
+      var statusMatch = status === 'all' || row.getAttribute('data-status') === status;
+      var searchMatch = !searchVal || row.getAttribute('data-search').indexOf(searchVal) !== -1;
+      var show = statusMatch && searchMatch;
+      row.style.display = show ? '' : 'none';
+      if(show) visible++;
+    });
+    document.getElementById('token-visible-count').textContent = visible;
+  }
+
+  function searchTokens(){
+    var activeBtn = document.querySelector('.section-tabs button.active');
+    var status = activeBtn ? activeBtn.textContent.toLowerCase() : 'all';
+    if(status === 'all'){ /* keep */ }
+    else if(status === 'curving'){ status = 'curve'; }
+    else if(status === 'graduated'){ status = 'grad'; }
+    filterLaunches(status, activeBtn);
+  }
+
+  function openTokenDetail(name, ticker, status, reserve, target, age, creator){
+    document.getElementById('d-name').textContent = name;
+    document.getElementById('d-ticker').textContent = ticker;
+    document.getElementById('d-addr').textContent = creator;
+    document.getElementById('d-avatar').textContent = ticker[0];
+    // Wire explorer + analytics links with full address
+    document.getElementById('d-explorer').href = 'https://blockscout.com/rhc/address/' + creator;
+    document.getElementById('d-analytics').href = 'https://luxy-rh.com/analytics/' + creator;
+    var pct = (parseFloat(reserve)/parseFloat(target)*100).toFixed(0);
+    document.getElementById('d-reserve').textContent = reserve + ' / ' + target + ' ETH';
+    document.getElementById('d-curve-pos').textContent = 'Position: ' + pct + '%';
+    // Move dot along curve
+    var dot = document.getElementById('d-curve-dot');
+    var cx = 35 + (pct/100) * 435;
+    var cy = 150 - (pct/100) * 130;
+    dot.setAttribute('cx', cx);
+    dot.setAttribute('cy', cy);
+    // Update grad bar
+    var gbar = document.getElementById('d-grad-fill');
+    gbar.style.width = pct + '%';
+    gbar.className = 'detail-grad-fill ' + (pct >= 100 ? 'done' : 'curving');
+    document.getElementById('detail-overlay').classList.add('open');
+  }
+  function closeDetail(){
+    document.getElementById('detail-overlay').classList.remove('open');
+  }
+  function switchDetailTab(tab, btn){
+    document.querySelectorAll('.detail-tabs button').forEach(function(b){ b.classList.remove('active'); });
+    btn.classList.add('active');
+    document.getElementById('detail-holders').style.display = tab === 'holders' ? '' : 'none';
+    document.getElementById('detail-trades').style.display = tab === 'trades' ? '' : 'none';
+  }
+  function doTrade(side){
+    var amt = document.getElementById('trade-amount').value;
+    if(!amt || parseFloat(amt) <= 0){ showToast('Enter an amount first.'); return; }
+    showToast((side==='buy'?'Bought':'Sold') + ' ' + amt + ' ETH of TEST — TX: 0x' + Math.random().toString(16).slice(2,12) + '...');
+    document.getElementById('trade-amount').value = '';
+  }
+  function setTradeAmt(val){
+    document.getElementById('trade-amount').value = val;
+  }
+
+  var observer = new IntersectionObserver(function(entries){
+    entries.forEach(function(e){
+      if(e.isIntersecting){ e.target.classList.add('in'); }
+    });
+  }, { threshold: 0.15 });
+  document.querySelectorAll('.reveal').forEach(function(el){ observer.observe(el); });
+</script>
+
+</body>
+</html>

@@ -55,29 +55,32 @@ DEPLOY  →  DISCOVER  →  GRADUATE  →  EARN
 
 ### Quick Start
 
-```bash
-# Clone
-git clone git@github.com:LUXY-rh/LUXY.git
-cd LUXY
+1. Visit **[luxy-rh.com](https://luxy-rh.com)**
+2. Connect your wallet (MetaMask or Rabby)
+3. Switch to **Robinhood Chain (4663)**
+4. Browse deployed tokens or create your own
+5. Buy tokens on the bonding curve — price is set by math, not middlemen
 
-# Serve locally
-python3 -m http.server 4300
-
-# Open http://localhost:4300
-```
+> Deploy in one signature. Curve pricing. Automatic graduation.
 
 ---
 
 ### Project Structure
 
 ```
-├── index.html              # Landing page + splash screen
+├── index.html              # Landing page + splash screen + launches
 ├── docs.html               # Full documentation (9 sections)
 ├── splash-screen.html      # Standalone splash animation
+├── vercel.json             # Vercel deployment config
 ├── assets/
-│   └── brand/
-│       ├── luxy-logo.svg
-│       └── luxy-twitter-banner.svg
+│   ├── brand/
+│   │   ├── luxy-logo.png
+│   │   ├── luxy-logo.svg
+│   │   └── luxy-twitter-banner.svg
+│   └── tokens/
+│       └── test-logo.svg   # Example token logo
+├── contracts/              # Solidity smart contracts (Foundry)
+├── api/                    # TypeScript API server + indexer
 ├── README.md
 └── LICENSE
 ```
@@ -86,16 +89,16 @@ python3 -m http.server 4300
 
 ### Links
 
-- 🌐 [luxy.finance](https://luxy.finance)
-- 📚 [Docs](https://luxy.finance/docs)
-- 𝕏 [@luxy_rhc](https://x.com/luxy_rhc)
+- 🌐 [luxy-rh.com](https://luxy-rh.com)
+- 📚 [Docs](https://luxy-rh.com/docs)
+- 🔍 [Blockscout Explorer](https://blockscout.com/rhc/)
 - ⛓️ Robinhood Chain · 4663
 
 ---
 
 ### Security
 
-LUXY is **non-custodial at execution**, not governance-free. The boundary between code guarantees and administrative scope is documented in full at [luxy.finance/docs#security](https://luxy.finance/docs).
+LUXY is **non-custodial at execution**, not governance-free. The boundary between code guarantees and administrative scope is documented in full at [luxy-rh.com/docs](https://luxy-rh.com/docs).
 
 - ✅ Trade pricing — settled atomically by the curve contract
 - ✅ Slippage protection — signed minimum-received checked on-chain

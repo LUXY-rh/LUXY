@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Luxy · Loading</title>
+<link rel="icon" type="image/png" href="assets/brand/luxy-logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper: #EDE9DC;
+    --ink: #1B2233;
+    --ink-soft: #3A4256;
+    --muted: #767C8C;
+    --grid: #CFC8B2;
+    --grid-strong: #B9B097;
+    --cobalt: #1F4B8F;
+    --cobalt-deep: #163564;
+  }
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html,body{ height:100%; }
+  body{
+    background:
+      linear-gradient(var(--paper),var(--paper)),
+      repeating-linear-gradient(0deg, var(--grid) 0px, var(--grid) 1px, transparent 1px, transparent 32px),
+      repeating-linear-gradient(90deg, var(--grid) 0px, var(--grid) 1px, transparent 1px, transparent 32px);
+    color: var(--ink);
+    font-family: 'IBM Plex Mono', monospace;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+
+  #splash{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:22px;
+    opacity:0;
+    animation: fadeIn .6s ease forwards;
+  }
+  @keyframes fadeIn{ to{ opacity:1; } }
+
+  .mark{
+    width:96px; height:96px;
+    position:relative;
+  }
+  .mark svg{ width:100%; height:100%; display:block; }
+  .mark rect{
+    stroke: var(--ink);
+    stroke-width: 1.6;
+    fill: none;
+  }
+  .curve-path{
+    fill:none;
+    stroke: var(--cobalt);
+    stroke-width: 3.4;
+    stroke-linecap: round;
+    stroke-dasharray: 140;
+    stroke-dashoffset: 140;
+    animation: draw 1.6s ease forwards .3s infinite alternate;
+  }
+  @keyframes draw{ to{ stroke-dashoffset: 0; } }
+
+  .wordmark{
+    font-family: 'Fraunces', serif;
+    font-weight: 700;
+    font-size: 34px;
+    letter-spacing: -0.02em;
+    color: var(--ink);
+  }
+
+  .status{
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .status .dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--cobalt);
+    animation: pulse 1.2s ease-in-out infinite;
+  }
+  @keyframes pulse{
+    0%,100%{ opacity:.25; transform:scale(0.85); }
+    50%{ opacity:1; transform:scale(1); }
+  }
+
+  .bar{
+    width: 180px;
+    height: 2px;
+    background: var(--grid-strong);
+    position: relative;
+    overflow: hidden;
+    border-radius: 1px;
+  }
+  .bar::after{
+    content:'';
+    position:absolute;
+    top:0; left:0; height:100%;
+    width: 40%;
+    background: var(--cobalt);
+    animation: slide 1.4s ease-in-out infinite;
+  }
+  @keyframes slide{
+    0%{ left: -40%; }
+    100%{ left: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="mark">
+    <img src="assets/brand/luxy-logo.png" alt="Luxy" width="96" height="96" style="display:block">
+  </div>
+  <div class="wordmark">Luxy</div>
+  <div class="bar"></div>
+  <div class="status"><span class="dot"></span>Robinhood Chain · 4663</div>
+</div>
+
+<script>
+  // Example: hide splash once the real page has finished loading.
+  // Replace this with your own app-ready signal.
+  window.addEventListener('load', function(){
+    setTimeout(function(){
+      var splash = document.getElementById('splash');
+      document.body.style.transition = 'opacity .5s ease';
+      document.body.style.opacity = '0';
+      setTimeout(function(){
+        // remove or hide #splash / redirect into the real app here
+      }, 500);
+    }, 1200);
+  });
+</script>
+
+</body>
+</html>

@@ -7,8 +7,6 @@ api/data/
 *.log
 dist/
 .cache/
-index.html
-splash-screen.html
 # Foundry
 cache/
 out/
