@@ -1354,6 +1354,13 @@
         <div class="w-tag">Browser extension</div>
       </span>
     </button>
+    <button class="wallet-option" onclick="connectWallet('OKX')">
+      <span class="w-icon" style="background:#E8F0FF;">🅾️</span>
+      <span>
+        <div class="w-name">OKX Wallet</div>
+        <div class="w-tag">Browser extension</div>
+      </span>
+    </button>
     <button class="wallet-option" onclick="connectWallet('WalletConnect')">
       <span class="w-icon" style="background:#E8F5FF;">🔗</span>
       <span>
@@ -1618,16 +1625,17 @@
     btn.style.fontSize = '13px';
   }
   async function connectWallet(name){
-    if(name === 'MetaMask' || name === 'Rabby'){
-      if(typeof window.ethereum !== 'undefined'){
+    if(name === 'MetaMask' || name === 'Rabby' || name === 'OKX'){
+      var provider = name === 'OKX' ? window.okxwallet : window.ethereum;
+      if(typeof provider !== 'undefined'){
         try{
-          var accounts = await window.ethereum.request({method:'eth_requestAccounts'});
+          var accounts = await provider.request({method:'eth_requestAccounts'});
           if(accounts.length > 0){
             closeWallet();
             updateWalletUI(accounts[0]);
             // Switch to Robinhood Chain 4663
-            try{ await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x1237'}]}); }
-            catch(e){ if(e.code===4902){ try{ await window.ethereum.request({method:'wallet_addEthereumChain',params:[{chainId:'0x1237',chainName:'Robinhood Chain',rpcUrls:['https://rpc.mainnet.chain.robinhood.com'],nativeCurrency:{name:'ETH',symbol:'ETH',decimals:18},blockExplorerUrls:['https://robinhoodchain.blockscout.com']}]}); }catch(_){} } }
+            try{ await provider.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x1237'}]}); }
+            catch(e){ if(e.code===4902){ try{ await provider.request({method:'wallet_addEthereumChain',params:[{chainId:'0x1237',chainName:'Robinhood Chain',rpcUrls:['https://rpc.mainnet.chain.robinhood.com'],nativeCurrency:{name:'ETH',symbol:'ETH',decimals:18},blockExplorerUrls:['https://robinhoodchain.blockscout.com']}]}); }catch(_){} } }
             showToast('Connected to ' + name + ' · Robinhood Chain 4663');
             return;
           }
