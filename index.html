@@ -1607,16 +1607,38 @@
   });
 
   // Connect Wallet
+  var walletAddr = null;
   function openConnect(e){ e.preventDefault(); document.getElementById('wallet-overlay').classList.add('open'); }
   function closeWallet(){ document.getElementById('wallet-overlay').classList.remove('open'); }
-  function connectWallet(name){
-    closeWallet();
+  function updateWalletUI(addr){
+    walletAddr = addr;
     var btn = document.querySelector('.navcta .btn-primary');
-    var addr = '0x' + Math.random().toString(16).slice(2, 42);
     btn.textContent = addr.slice(0,6) + '...' + addr.slice(-4);
     btn.style.fontFamily = 'IBM Plex Mono, monospace';
     btn.style.fontSize = '13px';
-    showToast('Connected to ' + name + ' · Robinhood Chain 4663');
+  }
+  async function connectWallet(name){
+    if(name === 'MetaMask' || name === 'Rabby'){
+      if(typeof window.ethereum !== 'undefined'){
+        try{
+          var accounts = await window.ethereum.request({method:'eth_requestAccounts'});
+          if(accounts.length > 0){
+            closeWallet();
+            updateWalletUI(accounts[0]);
+            // Switch to Robinhood Chain 4663
+            try{ await window.ethereum.request({method:'wallet_switchEthereumChain',params:[{chainId:'0x1237'}]}); }
+            catch(e){ if(e.code===4902){ try{ await window.ethereum.request({method:'wallet_addEthereumChain',params:[{chainId:'0x1237',chainName:'Robinhood Chain',rpcUrls:['https://rpc.mainnet.chain.robinhood.com'],nativeCurrency:{name:'ETH',symbol:'ETH',decimals:18},blockExplorerUrls:['https://robinhoodchain.blockscout.com']}]}); }catch(_){} } }
+            showToast('Connected to ' + name + ' · Robinhood Chain 4663');
+            return;
+          }
+        }catch(e){ console.log('Wallet connection failed:', e); }
+      }
+    }
+    // Fallback: mock connection
+    closeWallet();
+    var addr = '0x' + Math.random().toString(16).slice(2, 42);
+    updateWalletUI(addr);
+    showToast(name + ' connected (mock) · Robinhood Chain 4663');
   }
 
   function toggleFaq(el){
