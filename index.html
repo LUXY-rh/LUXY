@@ -615,8 +615,6 @@
   }
   .d-link-explorer{ color:var(--cobalt); border-color:rgba(31,75,143,0.2); }
   .d-link-explorer:hover{ background:rgba(31,75,143,0.06); }
-  .d-link-analytics{ color:var(--sienna); border-color:rgba(162,74,34,0.2); }
-  .d-link-analytics:hover{ background:rgba(162,74,34,0.06); }
   /* Graduation progress */
   .detail-grad-wrap{ margin-bottom:24px; }
   .detail-grad-header,.detail-grad-footer{
@@ -1388,10 +1386,6 @@
               <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><rect x="2" y="2" width="20" height="20" rx="4" stroke="currentColor" stroke-width="2"/><path d="M7 17L17 7M7 7h10v10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
               Explorer
             </a>
-            <a id="d-analytics" href="#" target="_blank" class="d-link-btn d-link-analytics">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none"><path d="M3 3v18h18M7 16l4-6 3 4 4-8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              Analytics
-            </a>
           </div>
         </div>
       </div>
@@ -1666,9 +1660,8 @@
     document.getElementById('d-ticker').textContent = ticker;
     document.getElementById('d-addr').textContent = creator;
     document.getElementById('d-avatar').textContent = ticker[0];
-    // Wire explorer + analytics links with full address
+    // Wire explorer link with full address
     document.getElementById('d-explorer').href = 'https://blockscout.com/rhc/address/' + creator;
-    document.getElementById('d-analytics').href = 'https://luxy-rh.com/analytics/' + creator;
     var pct = (parseFloat(reserve)/parseFloat(target)*100).toFixed(0);
     document.getElementById('d-reserve').textContent = reserve + ' / ' + target + ' ETH';
     document.getElementById('d-curve-pos').textContent = 'Position: ' + pct + '%';
